@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Libro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" type="text/css" href="js/slick-1.8.0/slick/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="js/slick-1.8.0/slick/slick-theme.css"/>
+
+    <link rel="stylesheet" type="text/css" href="css/common.css"/>
+    <link rel="stylesheet" type="text/css" href="css/libroextendido.css"/>
+
+
+
+</head>
+<body>
+
+
+<nav class="navbar navbar-expand-lg bg-transp font-roboto">
+    <div class="navbar-collapse">
+        <ul class="nav navbar-nav">
+            <li class="dropdown nav-item"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Géneros <span
+                    class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Ciencia</a></li>
+                    <li><a href="#">Ficción y literatura</a></li>
+                    <li><a href="#">Finanzas e inversión</a></li>
+                    <li><a href="#">Historia</a></li>
+                    <li><a href="#">Informática y tecnología</a></li>
+                    <li><a href="#">Infantiles</a></li>
+                    <li><a href="#">Psicología</a></li>
+                </ul>
+            </li>
+            <li class="nav-item"><a href="Index.html">Inicio </a></li>
+            <li class="nav-item"><a href="Index.html">Más populares </a></li>
+            <li class="nav-item"><a href="Index.html">Novedades </a></li>
+            <li class="nav-item"><a>Buscar</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item"><a href="Login.html">Acceder</a></li>
+        </ul>
+    </div>
+</nav>
+
+
+
+
+<div class="book">
+    <h2> Matar un ruiseñor </h2>
+    <a href="images/img1.jpg"><img src="images/img1.jpg" ></a>
+    <div class="ficha">
+        <p>
+            <b>Autor:</b>  Harper Lee <br>
+            <b>Título original:</b> To Kill a Mockingbird<br>
+            <b>Editorial:</b> J.B. Lippincott Co.<br>
+            <b>País:</b>	Estados Unidos<br>
+            <b>Fecha de publicación:</b> 11 de julio de 1960
+        </p>
+        <p>
+        <div class="stars">
+            <form action="">
+                <input class="star star-5" id="star-5" type="radio" name="star"/>
+                <label class="star star-5" for="star-5"></label>
+                <input class="star star-4" id="star-4" type="radio" name="star"/>
+                <label class="star star-4" for="star-4"></label>
+                <input class="star star-3" id="star-3" type="radio" name="star"/>
+                <label class="star star-3" for="star-3"></label>
+                <input class="star star-2" id="star-2" type="radio" name="star"/>
+                <label class="star star-2" for="star-2"></label>
+                <input class="star star-1" id="star-1" type="radio" name="star"/>
+                <label class="star star-1" for="star-1"></label>
+            </form>
+        </div>
+        </p>
+    </div>
+
+    <button class="btn" type="button">Comprar</button>
+
+    <div class="hr"><hr /></div>    <!--linea divisoria-->
+
+    <div class="descrip">
+        <p> Matar un ruiseñor (título original en inglés: To Kill a Mockingbird)
+            es una novela de 1960 de la escritora estadounidense Harper Lee. Su publicación tuvo un
+            éxito instantáneo, ganando el premio Pulitzer y pasando a convertirse en un clásico de la
+            literatura estadounidense. La novela está inspirada en las observaciones de la autora sobre
+            su familia y sus vecinos, así como en un incidente ocurrido cerca de su ciudad en 1936, cuando
+            tenía 10 años de edad.
+        </p>
+    </div>
+</div>
+
+<div class="comments">
+    <div id="comment_form">
+
+        <div>
+            <textarea rows="10" name="comment" id="comment" placeholder="Comentario"></textarea>
+        </div>
+        <div>
+            <input type="submit" name="submit" value="Añadir comentario">
+        </div>
+
+    </div>
+</div>
+
+<div class="carrousel-element">
+    <div class="carrousel-title">
+        <h1 >Libros relacionados</h1>
+    </div>
+
+    <div class='carrousel-element-container'>
+        <div class='single-item'>
+            <div class='item'>
+                <img class="carrousel-element-image" src="images/img1.jpg">
+                <h3 class="carrousel-element-titulo">Titulo 1</h3>
+                <h4 class="carrousel-element-autor">Autor 2</h4>
+            </div>
+            <div class='item'>
+                <img class="carrousel-element-image" src="images/img1.jpg">
+                <h3 class="carrousel-element-titulo">Titulo 1</h3>
+                <h4 class="carrousel-element-autor">Autor 2</h4>
+            </div>
+            <div class='item'>
+                <img class="carrousel-element-image" src="images/img1.jpg">
+                <h3 class="carrousel-element-titulo">Titulo 1</h3>
+                <h4 class="carrousel-element-autor">Autor 2</h4>
+            </div>
+            <div class='item'>
+                <img class="carrousel-element-image" src="images/img1.jpg">
+                <h3 class="carrousel-element-titulo">Titulo 1</h3>
+                <h4 class="carrousel-element-autor">Autor 2</h4>
+            </div>
+            <div class='item'>
+                <img class="carrousel-element-image" src="images/img1.jpg">
+                <h3 class="carrousel-element-titulo">Titulo 1</h3>
+                <h4 class="carrousel-element-autor">Autor 2</h4>
+            </div>
+            <div class='item'>
+                <img class="carrousel-element-image" src="images/img1.jpg">
+                <h3 class="carrousel-element-titulo">Titulo 1</h3>
+                <h4 class="carrousel-element-autor">Autor 2</h4>
+            </div>
+            <div class='item'>
+                <img class="carrousel-element-image" src="images/img1.jpg">
+                <h3 class="carrousel-element-titulo">Titulo 1</h3>
+                <h4 class="carrousel-element-autor">Autor 2</h4>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="carrousel-element">
+    <div class="carrousel-title">
+        <h1 >Del mismo autor</h1>
+    </div>
+
+    <div class='carrousel-element-container'>
+        <div class='single-item'>
+            <div class='item'>
+                <img class="carrousel-element-image" src="images/img1.jpg">
+                <h3 class="carrousel-element-titulo">Titulo 1</h3>
+                <h4 class="carrousel-element-autor">Autor 2</h4>
+            </div>
+            <div class='item'>
+                <img class="carrousel-element-image" src="images/img1.jpg">
+                <h3 class="carrousel-element-titulo">Titulo 1</h3>
+                <h4 class="carrousel-element-autor">Autor 2</h4>
+            </div>
+            <div class='item'>
+                <img class="carrousel-element-image" src="images/img1.jpg">
+                <h3 class="carrousel-element-titulo">Titulo 1</h3>
+                <h4 class="carrousel-element-autor">Autor 2</h4>
+            </div>
+            <div class='item'>
+                <img class="carrousel-element-image" src="images/img1.jpg">
+                <h3 class="carrousel-element-titulo">Titulo 1</h3>
+                <h4 class="carrousel-element-autor">Autor 2</h4>
+            </div>
+            <div class='item'>
+                <img class="carrousel-element-image" src="images/img1.jpg">
+                <h3 class="carrousel-element-titulo">Titulo 1</h3>
+                <h4 class="carrousel-element-autor">Autor 2</h4>
+            </div>
+            <div class='item'>
+                <img class="carrousel-element-image" src="images/img1.jpg">
+                <h3 class="carrousel-element-titulo">Titulo 1</h3>
+                <h4 class="carrousel-element-autor">Autor 2</h4>
+            </div>
+            <div class='item'>
+                <img class="carrousel-element-image" src="images/img1.jpg">
+                <h3 class="carrousel-element-titulo">Titulo 1</h3>
+                <h4 class="carrousel-element-autor">Autor 2</h4>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="js/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="js/slick-1.8.0/slick/slick.min.js"></script>
+<script type="text/javascript" src="js/script.js"></script>
+
+<footer>
+    <a href="#">Condiciones de uso</a>
+    <a href="#">Política de privacidad</a>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,116 @@
+/* Carrousel style */
+.carrousel-title{
+    position: relative;
+    left: 90px;
+    font-family: 'Roboto', sans-serif;
+    color: #453D38;
+    margin-bottom: 20px;
+}
+
+.carrousel-element{
+    width: 90%;
+}
+
+.carrousel-element-container {
+    margin: 0 auto;
+    padding-left: 40px;
+    padding-right: 40px;
+    width: 80%;
+    height: 220px;
+    color: #333;
+    background: transparent;
+}
+
+.single-item {
+    text-align: center;
+
+}
+
+.carrousel-element-titulo{
+    color: #1b1e21;
+    font-family: 'Roboto', sans-serif;
+    font-size: 20px;
+}
+
+.carrousel-element-autor{
+    color: #1b1e21;
+    font-family: 'Roboto', sans-serif;
+    font-size: 15px;
+}
+
+.carrousel-element-image {
+    display: block;
+    margin: 0 auto;
+    height: 130px;
+    width: 100px;
+}
+
+.slick-slide {
+    color: white;
+    background: transparent;
+}
+
+
+/* Navbar style */
+
+.font-roboto{
+    font-family: 'Roboto', sans-serif;
+}
+
+.bg-transp{
+    background-color: transparent;
+    border-color: transparent;
+}
+.nav-item{
+    text-decoration: none ;
+    background-color: transparent;
+}
+.nav-item:hover{
+    text-decoration: none ;
+    border-bottom: 2px solid black;
+    background-color: transparent;
+}
+
+.nav-item:active{
+    text-decoration: none ;
+    border-bottom: 2px solid black;
+    background-color: transparent;
+}
+
+
+.nav > li > a {
+    float: right;
+    display: block;
+    color: black;
+    text-align: center;
+    padding: 14px 16px 10px 16px;
+    text-decoration: none;
+    font-size: 17px;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Footer style */
+
+footer{
+
+    text-align: center;
+    background-color: #494949;
+    height: 30px;
+    margin-top: 50px;
+}
+footer > a{
+
+    color: white;
+    text-decoration: none;
+    margin: 10px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 15px;
+}
+
+footer > a:hover{
+    color: #9c9c9c;
+    text-decoration: none;
+    margin: 10px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 15px;
+}
