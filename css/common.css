@@ -1,5 +1,5 @@
 /* Carrousel style */
-.carrousel-title{
+.carrousel-title {
     position: relative;
     left: 90px;
     font-family: 'Roboto', sans-serif;
@@ -7,7 +7,7 @@
     margin-bottom: 20px;
 }
 
-.carrousel-element{
+.carrousel-element {
     width: 90%;
 }
 
@@ -26,13 +26,13 @@
 
 }
 
-.carrousel-element-titulo{
+.carrousel-element-titulo {
     color: #1b1e21;
     font-family: 'Roboto', sans-serif;
     font-size: 20px;
 }
 
-.carrousel-element-autor{
+.carrousel-element-autor {
     color: #1b1e21;
     font-family: 'Roboto', sans-serif;
     font-size: 15px;
@@ -50,33 +50,33 @@
     background: transparent;
 }
 
-
 /* Navbar style */
 
-.font-roboto{
+.font-roboto {
     font-family: 'Roboto', sans-serif;
 }
 
-.bg-transp{
+.bg-transp {
     background-color: transparent;
     border-color: transparent;
 }
-.nav-item{
-    text-decoration: none ;
+
+.nav-item {
+    text-decoration: none;
     background-color: transparent;
 }
-.nav-item:hover{
-    text-decoration: none ;
+
+.nav-item:hover {
+    text-decoration: none;
     border-bottom: 2px solid black;
     background-color: transparent;
 }
 
-.nav-item:active{
-    text-decoration: none ;
+.nav-item:active {
+    text-decoration: none;
     border-bottom: 2px solid black;
     background-color: transparent;
 }
-
 
 .nav > li > a {
     float: right;
@@ -91,14 +91,15 @@
 
 /* Footer style */
 
-footer{
+footer {
 
     text-align: center;
     background-color: #494949;
     height: 30px;
     margin-top: 50px;
 }
-footer > a{
+
+footer > a {
 
     color: white;
     text-decoration: none;
@@ -107,7 +108,7 @@ footer > a{
     font-size: 15px;
 }
 
-footer > a:hover{
+footer > a:hover {
     color: #9c9c9c;
     text-decoration: none;
     margin: 10px;
