@@ -9,7 +9,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 public class LibroDAO {
-    public void insertarLibro(LibroVO libro, Connection connection) {
+    public static void insertarLibro(LibroVO libro, Connection connection) {
         try {
             /* Create "preparedStatement". */
             String queryString = "INSERT INTO LIBRO " +
@@ -46,7 +46,7 @@ public class LibroDAO {
     }
 
     // Pre: El autor ha de estar
-    public void insertarAutorLibro(LibroVO libro, AutorVO autorVO, Connection connection) {
+    public static void insertarAutorLibro(LibroVO libro, AutorVO autorVO, Connection connection) {
         try {
 
                      /* Create "preparedStatement". */
@@ -76,7 +76,7 @@ public class LibroDAO {
         }
     }
 
-    public void insertarGeneroLibro(LibroVO libro, GeneroVO generoVO, Connection connection) {
+    public static void insertarGeneroLibro(LibroVO libro, GeneroVO generoVO, Connection connection) {
         try {
             if (libro.getGeneros() != null) {
 
@@ -106,7 +106,7 @@ public class LibroDAO {
     }
 
 
-    public void insertarComentarioLibro(ComentarioVO comentarioVO, Connection connection) {
+    public static void insertarComentarioLibro(ComentarioVO comentarioVO, Connection connection) {
         if (comentarioVO.getLibro() != null && comentarioVO.getUsuario() != null && comentarioVO.getFecha() != null && comentarioVO.getComentario() != null) {
                try {
                    String queryString = "INSERT INTO COMENTA " +
@@ -136,6 +136,7 @@ public class LibroDAO {
 
     }
 
+<<<<<<< HEAD
     public void insertarValoracionLibro(ValoracionVO valoracionVO, Connection connection) {
         if (valoracionVO.getLibro() != null && valoracionVO.getUsuario() != null && valoracionVO.getComentario() != null) {
            try {
@@ -161,9 +162,13 @@ public class LibroDAO {
                e.printStackTrace(System.err);
            }
         }
+=======
+    public static void insertarValoracionLibro(ValoracionVO valoracionVO, Connection connection) {
+        /*TODO*/
+>>>>>>> d8424675822a93efc6c59ec2a50574cb7208cf6d
     }
 
-    public void actualizarLibro(LibroVO libro, Connection connection) {
+    public static void actualizarLibro(LibroVO libro, Connection connection) {
         try {
             /* Create "preparedStatement". */
             String queryString = "UPDATE LIBRO " +
@@ -199,6 +204,7 @@ public class LibroDAO {
         }
     }
 
+<<<<<<< HEAD
     public void actualizarAutoresLibro(LibroVO libro, Connection connection) {
         try {
                  /* Create "preparedStatement". */
@@ -308,10 +314,26 @@ public class LibroDAO {
                e.printStackTrace(System.err);
            }
         }
+=======
+    public static void actualizarAutoresLibro(LibroVO libro, Connection connection) {
+        /*TODO*/
+    }
+
+    public static void actualizarGenerosLibro(LibroVO libro, Connection connection) {
+        /*TODO*/
+    }
+
+    public static void actualizarComentarioLibro(ComentarioVO comentarioVO, Connection connection) {
+        /*TODO*/
+    }
+
+    public static void actualizarValoracionLibro(ValoracionVO valoracionVO, Connection connection) {
+        /*TODO*/
+>>>>>>> d8424675822a93efc6c59ec2a50574cb7208cf6d
     }
 
 
-    public void eliminarLibro(LibroVO libro, Connection connection) {
+    public static void eliminarLibro(LibroVO libro, Connection connection) {
         try {
             /* Create "preparedStatement". */
             String queryString = "DELETE FROM libro " +
@@ -332,6 +354,7 @@ public class LibroDAO {
         }
     }
 
+<<<<<<< HEAD
     public void eliminarComentarioLibro(ComentarioVO comentarioVO, Connection connection) {
         /* Create "preparedStatement". */
             String queryString = "DELETE FROM COMENTA " +
@@ -350,6 +373,10 @@ public class LibroDAO {
         } catch (Exception e) {
             e.printStackTrace(System.err);
         }
+=======
+    public static void eliminarComentarioLibro(ComentarioVO comentarioVO, Connection connection) {
+        /*TODO*/
+>>>>>>> d8424675822a93efc6c59ec2a50574cb7208cf6d
     }
 
     public void eliminarValoracionLibro(ValoracionVO valoracionVO, Connection connection) {
@@ -373,11 +400,11 @@ public class LibroDAO {
     }
 
 
-    public LibroVO encontrarDatosLibro(String isbn, Connection connection) {
+    public static LibroVO encontrarDatosLibro(String isbn, Connection connection) {
         LibroVO libroVO = null;
         try {
             /* Create "preparedStatement". */
-            String queryString = "SELECT EDITORIAL, TITULO, PAIS_DE_PUBLICACION, PRECIO, NUMERO_PAGINAS, NUMERO_DE_EDICION, IDIOMA, DESCRICION, DESCRICION_CORTA, TITULO_ORIGINAL, FECHA_DE_PUBLICACION" +
+            String queryString = "SELECT EDITORIAL, TITULO, PAIS_DE_PUBLICACION, PRECIO, NUMERO_PAGINAS, NUMERO_DE_EDICION, IDIOMA, DESCRICION, DESCRICION_CORTA, TITULO_ORIGINAL, FECHA_DE_PUBLICACION " +
                     "FROM LIBRO WHERE  ISBN = ?";
             PreparedStatement preparedStatement =
                     connection.prepareStatement(queryString);
@@ -422,7 +449,7 @@ public class LibroDAO {
         return libroVO;
     }
 
-    public List<LibroVO> encontrarDatosLibro(Connection connection) {
+    public static List<LibroVO> encontrarDatosLibro(Connection connection) {
         List<LibroVO> resultado = new ArrayList<>();
         try {
             LibroVO libroVO = null;
@@ -471,6 +498,7 @@ public class LibroDAO {
         return resultado;
     }
 
+<<<<<<< HEAD
     public List<AutorVO> encontrarAutoresLibro(String isbn, Connection connection) {
         List<AutorVO> resultado = new ArrayList<>();
         try {
@@ -746,6 +774,34 @@ public class LibroDAO {
 
         }
         return resultado;
+=======
+    public static List<AutorVO> encontrarAutoresLibro(String isbn, Connection connection) {
+        /* TODO */
+    }
+
+    public static List<GeneroVO> encontrarGenerosLibro(String isbn, Connection connection) {
+        /* TODO */
+    }
+
+    public static List<ComentarioVO> encontrarComentariosLibro(String isbn, Connection connection) {
+        /* TODO */
+    }
+
+    public static List<ValoracionVO> encontrarValoracionesLibro(String isbn, Connection connection) {
+        /* TODO */
+    }
+
+    public static List<CompraVO> encontrarVentasLibro(String isbn, Connection connection) {
+        /* TODO */
+    }
+
+    public static List<VisitaVO> encontrarVisitasLibro(String isbn, Connection connection) {
+        /* TODO */
+    }
+
+    public static boolean existeLibro(String isbn, Connection connection){
+        /* TODO */
+>>>>>>> d8424675822a93efc6c59ec2a50574cb7208cf6d
     }
 
 }
