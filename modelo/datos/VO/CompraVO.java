@@ -6,9 +6,9 @@ public class CompraVO {
     private UsuarioVO usuario;
     private LibroVO libro;
     private Calendar fecha;
-    private double precio;
+    private Double precio;
 
-    public CompraVO(UsuarioVO usuario, LibroVO libro, Calendar fecha, double precio) {
+    public CompraVO(UsuarioVO usuario, LibroVO libro, Calendar fecha, Double precio) {
         this.usuario = usuario;
         this.libro = libro;
         this.fecha = fecha;
@@ -39,7 +39,7 @@ public class CompraVO {
         this.fecha = fecha;
     }
 
-    public double getPrecio() {
+    public Double getPrecio() {
         return precio;
     }
 

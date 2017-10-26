@@ -44,11 +44,59 @@ public class UsuarioDAO {
     }
 
     public void insertarCompraLibro(CompraVO compraVO, Connection connection){
-        /* TODO */
+        if (compraVO.getLibro() != null && compraVO.getUsuario() != null && compraVO.getFecha() != null && compraVO.getPrecio() != null) {
+            try {
+                String queryString = "INSERT INTO COMPRA " +
+                        "(USUARIO, LIBRO, FECHA,PRECIO) " +
+                        "VALUES (?,?,?,?)";
+
+                PreparedStatement preparedStatement =
+                        connection.prepareStatement(queryString);
+
+            /* Fill "preparedStatement". */
+                preparedStatement.setString(1, compraVO.getUsuario().getNombreDeUsuario());
+                preparedStatement.setString(2, compraVO.getLibro().getIsbn());
+                preparedStatement.setDate(3, new java.sql.Date(compraVO.getFecha().getTimeInMillis()));
+                preparedStatement.setDouble(4, compraVO.getPrecio());
+
+            /* Execute query. */
+                int insertedRows = preparedStatement.executeUpdate();
+
+                if (insertedRows != 1) {
+                    throw new SQLException("Problemas insertando compra de libros!!!!");
+                }
+            }  catch (Exception e) {
+                e.printStackTrace(System.err);
+            }
+        }
     }
 
-    public void insertarVisitaLibro(VisitaVO compraVO, Connection connection){
-        /* TODO */
+    public void insertarVisitaLibro(VisitaVO visitaVO, Connection connection){
+        if (visitaVO.getLibro() != null && visitaVO.getUsuario() != null && visitaVO.getFecha() != null) {
+            try {
+                String queryString = "INSERT INTO VISITA" +
+                        "(USUARIO, LIBRO, FECHA) " +
+                        "VALUES (?,?,?)";
+
+                PreparedStatement preparedStatement =
+                        connection.prepareStatement(queryString);
+
+            /* Fill "preparedStatement". */
+                preparedStatement.setString(1, visitaVO.getUsuario().getNombreDeUsuario());
+                preparedStatement.setString(2, visitaVO.getLibro().getIsbn());
+                preparedStatement.setDate(3, new java.sql.Date(visitaVO.getFecha().getTimeInMillis()));
+
+
+            /* Execute query. */
+                int insertedRows = preparedStatement.executeUpdate();
+
+                if (insertedRows != 1) {
+                    throw new SQLException("Problemas insertando visita de libros!!!!");
+                }
+            } catch (Exception e) {
+                e.printStackTrace(System.err);
+            }
+        }
     }
 
     public void actualizarUsuario (UsuarioVO usuario, Connection connection) {
@@ -82,11 +130,59 @@ public class UsuarioDAO {
     }
 
     public void actualizarCompraLibro(CompraVO compraVO, Connection connection){
-        /* TODO */
+        if (compraVO.getLibro() != null && compraVO.getUsuario() != null && compraVO.getFecha() != null && compraVO.getPrecio() != null) {
+            try {
+                String queryString = "UPDATE COMPRA " +
+                        "SET FECHA = ?, PRECIO = ? " +
+                        "WHERE USUARIO = ? AND LIBRO = ?";
+
+                PreparedStatement preparedStatement =
+                        connection.prepareStatement(queryString);
+
+            /* Fill "preparedStatement". */
+                preparedStatement.setString(1, compraVO.getUsuario().getNombreDeUsuario());
+                preparedStatement.setString(2, compraVO.getLibro().getIsbn());
+                preparedStatement.setDate(3, new java.sql.Date(compraVO.getFecha().getTimeInMillis()));
+                preparedStatement.setDouble(4, compraVO.getPrecio());
+
+            /* Execute query. */
+                int insertedRows = preparedStatement.executeUpdate();
+
+                if (insertedRows != 1) {
+                    throw new SQLException("Problemas insertando compra de libros!!!!");
+                }
+            }  catch (Exception e) {
+                e.printStackTrace(System.err);
+            }
+        }
     }
 
-    public void actualizarVisitaLibro(VisitaVO compraVO, Connection connection){
-        /* TODO */
+    public void actualizarVisitaLibro(VisitaVO visitaVO, Connection connection){
+        if (visitaVO.getLibro() != null && visitaVO.getUsuario() != null && visitaVO.getFecha() != null) {
+            try {
+                String queryString = "UPDATE VISITA " +
+                        "SET FECHA = ? " +
+                        "WHERE USUARIO = ? AND LIBRO = ?";
+
+                PreparedStatement preparedStatement =
+                        connection.prepareStatement(queryString);
+
+            /* Fill "preparedStatement". */
+                preparedStatement.setString(1, visitaVO.getUsuario().getNombreDeUsuario());
+                preparedStatement.setString(2, visitaVO.getLibro().getIsbn());
+                preparedStatement.setDate(3, new java.sql.Date(visitaVO.getFecha().getTimeInMillis()));
+
+
+            /* Execute query. */
+                int insertedRows = preparedStatement.executeUpdate();
+
+                if (insertedRows != 1) {
+                    throw new SQLException("Problemas insertando visita de libros!!!!");
+                }
+            } catch (Exception e) {
+                e.printStackTrace(System.err);
+            }
+        }
     }
 
     public void eliminarUsuario(UsuarioVO usuario, Connection connection){
@@ -111,11 +207,51 @@ public class UsuarioDAO {
     }
 
     public void eliminarCompraLibro(CompraVO compraVO, Connection connection){
-        /* TODO */
+        if (compraVO.getLibro() != null && compraVO.getUsuario() != null) {
+            try{
+            /* Create "preparedStatement". */
+                String queryString = "DELETE FROM COMPRA " +
+                        "WHERE USUARIO = ? AND LIBRO = ?";
+                PreparedStatement preparedStatement =
+                        connection.prepareStatement(queryString);
+            /* Fill "preparedStatement". */
+                preparedStatement.setString(1, compraVO.getUsuario().getNombreDeUsuario());
+                preparedStatement.setString(2, compraVO.getLibro().getIsbn());
+
+            /* Execute query. */
+                int insertedRows = preparedStatement.executeUpdate();
+
+                if (insertedRows != 1) {
+                    throw new SQLException( "Problemas eliminando CompraLibro!!!!");
+                }
+            } catch (Exception e) {
+                e.printStackTrace(System.err);
+            }
+        }
     }
 
-    public void eliminarVisitaLibro(VisitaVO compraVO, Connection connection){
-        /* TODO */
+    public void eliminarVisitaLibro(VisitaVO visitaVO, Connection connection){
+        if (visitaVO.getLibro() != null && visitaVO.getUsuario() != null) {
+            try{
+            /* Create "preparedStatement". */
+                String queryString = "DELETE FROM VISITA " +
+                        "WHERE USUARIO = ? AND LIBRO = ?";
+                PreparedStatement preparedStatement =
+                        connection.prepareStatement(queryString);
+            /* Fill "preparedStatement". */
+                preparedStatement.setString(1, visitaVO.getUsuario().getNombreDeUsuario());
+                preparedStatement.setString(2, visitaVO.getLibro().getIsbn());
+
+            /* Execute query. */
+                int insertedRows = preparedStatement.executeUpdate();
+
+                if (insertedRows != 1) {
+                    throw new SQLException( "Problemas eliminando VisitaLibro!!!!");
+                }
+            } catch (Exception e) {
+                e.printStackTrace(System.err);
+            }
+        }
     }
 
     public UsuarioVO encontrarDatosUsuario (String nombre_user, Connection connection){
@@ -211,24 +347,142 @@ public class UsuarioDAO {
 
 
 
-    public List<ComentarioVO> encontrarComentariosRealizados (String isbn, Connection connection){
-        /* TODO */
+    public List<ComentarioVO> encontrarComentariosRealizados (String nombre_usuario, Connection connection){
+
+        List<ComentarioVO> list = new ArrayList<>();
+        try{
+            /* Create "preparedStatement". */
+            UsuarioVO usuarioVO = encontrarDatosUsuario(nombre_usuario,connection);
+            String queryString = "SELECT COMENTARIO,  LIBRO, FECHA " +
+                    "FROM COMENTA WHERE  USUARIO = ?";
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(queryString);
+
+            /* Fill "preparedStatement". */
+            preparedStatement.setString(1, nombre_usuario);
+
+            /* Execute query. */
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+            	/* Execute query. */
+                String comentario  = resultSet.getString(1);
+                String libro = resultSet.getString(2);
+                LibroVO libroVO = LibroDAO.encontrarDatosLibro(libro,connection);
+                Calendar calendar = new GregorianCalendar();
+                calendar.setTime(resultSet.getDate(3));
+
+                ComentarioVO comentarioVO = new ComentarioVO (usuarioVO, libroVO, calendar, comentario);
+                list.add(comentarioVO);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+        }
+        return list;
     }
 
-    public List<ValoracionVO> encontrarValoracionesRealizadas (String isbn, Connection connection){
-        /* TODO */
+    public List<ValoracionVO> encontrarValoracionesRealizadas (String nombre_usuario, Connection connection){
+        List<ValoracionVO> list = new ArrayList<>();
+        try{
+            /* Create "preparedStatement". */
+            UsuarioVO usuarioVO = encontrarDatosUsuario(nombre_usuario,connection);
+            String queryString = "SELECT PUNTUACION,  LIBRO " +
+                    "FROM PUNTUA WHERE  USUARIO = ?";
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(queryString);
+
+            /* Fill "preparedStatement". */
+            preparedStatement.setString(1, nombre_usuario);
+
+            /* Execute query. */
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+            	/* Execute query. */
+                Integer puntuacion  = resultSet.getInt(1);
+                String libro = resultSet.getString(2);
+                LibroVO libroVO = LibroDAO.encontrarDatosLibro(libro,connection);
+
+                ValoracionVO valoracionVO = new ValoracionVO (usuarioVO, libroVO, puntuacion);
+                list.add(valoracionVO);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+        }
+        return list;
     }
 
-    public List<CompraVO> encontrarComprasRealizadas (String isbn, Connection connection){
-        /* TODO */
+    public List<CompraVO> encontrarComprasRealizadas (String nombre_usuario, Connection connection){
+        List<CompraVO> list = new ArrayList<>();
+        try{
+            /* Create "preparedStatement". */
+            UsuarioVO usuarioVO = encontrarDatosUsuario(nombre_usuario,connection);
+            String queryString = "SELECT PRECIO,  LIBRO, FECHA " +
+                    "FROM COMPRA WHERE  USUARIO = ?";
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(queryString);
+
+            /* Fill "preparedStatement". */
+            preparedStatement.setString(1, nombre_usuario);
+
+            /* Execute query. */
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+            	/* Execute query. */
+                Double precio  = resultSet.getDouble(1);
+                String libro = resultSet.getString(2);
+                LibroVO libroVO = LibroDAO.encontrarDatosLibro(libro,connection);
+                Calendar calendar = new GregorianCalendar();
+                calendar.setTime(resultSet.getDate(3));
+
+                CompraVO compraVO = new CompraVO (usuarioVO, libroVO, calendar, precio);
+                list.add(compraVO);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+        }
+        return list;
     }
 
-    public List<VisitaVO> encontrarVisitasRealizadas (String isbn, Connection connection){
-        /* TODO */
+    public List<VisitaVO> encontrarVisitasRealizadas (String nombre_usuario, Connection connection){
+        List<VisitaVO> list = new ArrayList<>();
+        try{
+            /* Create "preparedStatement". */
+            UsuarioVO usuarioVO = encontrarDatosUsuario(nombre_usuario,connection);
+            String queryString = "SELECT LIBRO, FECHA " +
+                    "FROM VISITA WHERE  USUARIO = ?";
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(queryString);
+
+            /* Fill "preparedStatement". */
+            preparedStatement.setString(1, nombre_usuario);
+
+            /* Execute query. */
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+            	/* Execute query. */
+                String libro = resultSet.getString(1);
+                LibroVO libroVO = LibroDAO.encontrarDatosLibro(libro,connection);
+                Calendar calendar = new GregorianCalendar();
+                calendar.setTime(resultSet.getDate(2));
+
+                VisitaVO visitaVO = new VisitaVO (usuarioVO, libroVO, calendar);
+                list.add(visitaVO);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+        }
+        return list;
     }
 
     public boolean existeUsuario(String nombreusuario, Connection connection){
-        /* TODO */
+        return encontrarDatosUsuario(nombreusuario,connection) != null;
     }
 
 
