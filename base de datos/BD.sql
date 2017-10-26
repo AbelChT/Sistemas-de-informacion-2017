@@ -65,7 +65,6 @@ CREATE TABLE puntua(
 	usuario VARCHAR(50) REFERENCES usuario(nombre_de_usuario),
 	libro VARCHAR(150) REFERENCES libro(isbn),
 	puntuacion INTEGER NOT NULL,
-	fecha DATE NOT NULL,
 	PRIMARY KEY(usuario,libro)
 );
 
