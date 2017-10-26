@@ -1,5 +1,5 @@
 CREATE TABLE libro(
-	isbn STRING PRIMARY KEY,
+	isbn VARCHAR(150) PRIMARY KEY,
 	editorial VARCHAR(50),
 	titulo VARCHAR(50),
 	pais_de_publicacion VARCHAR(50),
@@ -19,7 +19,7 @@ CREATE TABLE genero(
 );
 
 CREATE TABLE pertenece_al_genero(
-	libro INTEGER REFERENCES libro(isbn),
+	libro VARCHAR(150) REFERENCES libro(isbn),
 	genero VARCHAR(50) REFERENCES genero(nombre),
 	PRIMARY KEY(libro,genero)
 );
@@ -27,7 +27,7 @@ CREATE TABLE pertenece_al_genero(
 
 
 CREATE TABLE libro_en_oferta(
-	libro INTEGER REFERENCES libro(isbn) PRIMARY KEY ON DELETE CASCADE,
+	libro VARCHAR(150) REFERENCES libro(isbn) PRIMARY KEY ON DELETE CASCADE,
 	porcentaje_rebaja REAL NOT NULL CHECK ((porcentaje_rebaja > 0.0) AND (porcentaje_rebaja < 100.0))
 );
 
@@ -38,7 +38,7 @@ CREATE TABLE autor(
 );
 
 CREATE TABLE escrito_por(
-	libro INTEGER REFERENCES libro(isbn),
+	libro VARCHAR(150) REFERENCES libro(isbn),
 	autor VARCHAR(150) REFERENCES autor(nombre_completo),
 	PRIMARY KEY(libro,autor)
 );
@@ -63,7 +63,7 @@ CREATE TABLE usuario(
 
 CREATE TABLE puntua(
 	usuario VARCHAR(50) REFERENCES usuario(nombre_de_usuario),
-	libro INTEGER REFERENCES libro(isbn),
+	libro VARCHAR(150) REFERENCES libro(isbn),
 	puntuacion INTEGER NOT NULL,
 	fecha DATE NOT NULL,
 	PRIMARY KEY(usuario,libro)
@@ -77,14 +77,14 @@ CREATE TABLE visita(
  * Almacenamos todas las fechas en las que un usuario haya accedido a un libro para luego utilizar esta
  * información a la hora de generar el sistema de recomendación */
 	usuario VARCHAR(50) REFERENCES usuario(nombre_de_usuario),
-	libro INTEGER REFERENCES libro(isbn),
+	libro VARCHAR(150) REFERENCES libro(isbn),
 	fecha DATE NOT NULL,
 	PRIMARY KEY(usuario,libro,fecha)
 );
 
 CREATE TABLE compra(
 	usuario VARCHAR(50) REFERENCES usuario(nombre_de_usuario),
-	libro INTEGER REFERENCES libro(isbn),
+	libro VARCHAR(150) REFERENCES libro(isbn),
 	fecha DATE NOT NULL,
 	precio REAL NOT NULL,
 	/* Metodo de pago o mas info sobre la compra */
@@ -93,7 +93,7 @@ CREATE TABLE compra(
 
 CREATE TABLE comenta(
 	usuario VARCHAR(50) REFERENCES usuario(nombre_de_usuario),
-	libro INTEGER REFERENCES libro(isbn),
+	libro VARCHAR(150) REFERENCES libro(isbn),
 	fecha DATE NOT NULL,
 	comentario VARCHAR(1000) NOT NULL,
 	PRIMARY KEY(usuario,libro,fecha)

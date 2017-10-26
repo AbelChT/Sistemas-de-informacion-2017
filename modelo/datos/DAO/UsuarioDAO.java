@@ -227,4 +227,9 @@ public class UsuarioDAO {
         /* TODO */
     }
 
+    public boolean existeUsuario(String nombreusuario, Connection connection){
+        /* TODO */
+    }
+
+
 }

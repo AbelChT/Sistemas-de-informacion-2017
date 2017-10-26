@@ -84,4 +84,8 @@ public class GeneroDAO {
         }
         return resultado;
     }
+
+    public boolean existeGenero(String nombre, Connection connection){
+        /* TODO */
+    }
 }

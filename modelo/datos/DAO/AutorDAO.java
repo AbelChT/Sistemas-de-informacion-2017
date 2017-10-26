@@ -151,4 +151,8 @@ public class AutorDAO {
         /* TODO */
     }
 
+    public boolean existeAutor(String nombre_completo, Connection connection){
+        /* TODO */
+    }
+
 }
