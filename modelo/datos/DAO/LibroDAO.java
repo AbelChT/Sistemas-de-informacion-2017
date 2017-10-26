@@ -88,7 +88,7 @@ public class LibroDAO {
                             connection.prepareStatement(queryString);
 
             /* Fill "preparedStatement". */
-                    preparedStatement.setString(2, libro.getIsbn());
+                    preparedStatement.setString(1, libro.getIsbn());
                     preparedStatement.setString(2, generoVO.getNombre());
 
 
@@ -111,7 +111,7 @@ public class LibroDAO {
                try {
                    String queryString = "INSERT INTO COMENTA " +
                            "(USUARIO, LIBRO, FECHA, COMENTARIO) " +
-                           "VALUES (?,?,?,?";
+                           "VALUES (?,?,?,?)";
 
                    PreparedStatement preparedStatement =
                            connection.prepareStatement(queryString);
@@ -119,8 +119,8 @@ public class LibroDAO {
             /* Fill "preparedStatement". */
                    preparedStatement.setString(1, comentarioVO.getUsuario().getNombreDeUsuario());
                    preparedStatement.setString(2, comentarioVO.getLibro().getIsbn());
-                   preparedStatement.setDate(2, new java.sql.Date(comentarioVO.getFecha().getTimeInMillis()));
-                   preparedStatement.setString(2, comentarioVO.getComentario());
+                   preparedStatement.setDate(3, new java.sql.Date(comentarioVO.getFecha().getTimeInMillis()));
+                   preparedStatement.setString(4, comentarioVO.getComentario());
 
             /* Execute query. */
                    int insertedRows = preparedStatement.executeUpdate();
@@ -137,7 +137,30 @@ public class LibroDAO {
     }
 
     public void insertarValoracionLibro(ValoracionVO valoracionVO, Connection connection) {
-        /*TODO*/
+        if (valoracionVO.getLibro() != null && valoracionVO.getUsuario() != null && valoracionVO.getComentario() != null) {
+           try {
+               String queryString = "INSERT INTO PUNTUA " +
+                       "(USUARIO, LIBRO, PUNTUACION) " +
+                       "VALUES (?,?,?)";
+
+               PreparedStatement preparedStatement =
+                       connection.prepareStatement(queryString);
+
+        /* Fill "preparedStatement". */
+               preparedStatement.setString(1, valoracionVO.getUsuario().getNombreDeUsuario());
+               preparedStatement.setString(2, valoracionVO.getLibro().getIsbn());
+               preparedStatement.setString(3, valoracionVO.getPuntuacion());
+
+        /* Execute query. */
+               int insertedRows = preparedStatement.executeUpdate();
+
+               if (insertedRows != 1) {
+                   throw new SQLException("Problemas insertando valoracion de libros!!!!");
+               }
+           }  catch (Exception e) {
+               e.printStackTrace(System.err);
+           }
+        }
     }
 
     public void actualizarLibro(LibroVO libro, Connection connection) {
@@ -177,19 +200,114 @@ public class LibroDAO {
     }
 
     public void actualizarAutoresLibro(LibroVO libro, Connection connection) {
-        /*TODO*/
+        try {
+                 /* Create "preparedStatement". */
+            String queryString = "UPDATE ESCRITO_POR " +
+                    "SET AUTOR=? " +
+                    "WHERE ISBN = ?";
+
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(queryString);
+
+        /* Fill "preparedStatement". */
+            preparedStatement.setString(1, libro.getNombreCompleto());
+            preparedStatement.setString(2, libro.getIsbn());
+
+
+        /* Execute query. */
+            int insertedRows = preparedStatement.executeUpdate();
+
+            if (insertedRows != 1) {
+                throw new SQLException("Problemas ACTUALIZAR autor de libros!!!!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+        }
     }
 
     public void actualizarGenerosLibro(LibroVO libro, Connection connection) {
-        /*TODO*/
+        if (libro.getGeneros() != null) {
+
+            String queryString = "UPDATE PERTENECE_AL_GENERO " +
+                    "SET GENERO=? " +
+                    "WHERE ISBN = ?";
+
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(queryString);
+
+    /* Fill "preparedStatement". */
+            preparedStatement.setString(2, libro.getNombre());
+            preparedStatement.setString(1, libro.getIsbn());
+
+
+    /* Execute query. */
+            int insertedRows = preparedStatement.executeUpdate();
+
+            if (insertedRows != 1) {
+                throw new SQLException("Problemas actualizando generos de libros!!!!");
+            }
+        }
+
+        catch (Exception e) {
+            e.printStackTrace(System.err);
+        }
     }
 
     public void actualizarComentarioLibro(ComentarioVO comentarioVO, Connection connection) {
-        /*TODO*/
+        if (comentarioVO.getLibro() != null && comentarioVO.getUsuario() != null && comentarioVO.getFecha() != null && comentarioVO.getComentario() != null) {
+               try {
+                   String queryString = "UPDATE COMENTA " +
+                           "SET COMENTARIO=?" +
+                           "WHERE USUARIO=? AND LIBRO=? AND FECHA=?";
+
+                   PreparedStatement preparedStatement =
+                           connection.prepareStatement(queryString);
+
+            /* Fill "preparedStatement". */
+                   preparedStatement.setString(1, comentarioVO.getComentario());
+                   preparedStatement.setString(2, comentarioVO.getUsuario().getNombreDeUsuario());
+                   preparedStatement.setString(3, comentarioVO.getLibro().getIsbn());
+                   preparedStatement.setDate(4, new java.sql.Date(comentarioVO.getFecha().getTimeInMillis()));
+
+            /* Execute query. */
+                   int insertedRows = preparedStatement.executeUpdate();
+
+                   if (insertedRows != 1) {
+                       throw new SQLException("Problemas actualizando comentario de libros!!!!");
+                   }
+               }  catch (Exception e) {
+                   e.printStackTrace(System.err);
+               }
+
+        }
     }
 
     public void actualizarValoracionLibro(ValoracionVO valoracionVO, Connection connection) {
-        /*TODO*/
+        if (valoracionVO.getLibro() != null && valoracionVO.getUsuario() != null && valoracionVO.getComentario() != null) {
+           try {
+               String queryString = "UPDATE PUNTUA " +
+                       "SET PUNTUACION=?" +
+                       "WHERE USUARIO=?, LIBRO=?) " +
+                       "VALUES (?,?,?)";
+
+               PreparedStatement preparedStatement =
+                       connection.prepareStatement(queryString);
+
+        /* Fill "preparedStatement". */
+               preparedStatement.setString(1, valoracionVO.getPuntuacion());
+               preparedStatement.setString(2, valoracionVO.getUsuario().getNombreDeUsuario());
+               preparedStatement.setString(3, valoracionVO.getLibro().getIsbn());
+
+        /* Execute query. */
+               int insertedRows = preparedStatement.executeUpdate();
+
+               if (insertedRows != 1) {
+                   throw new SQLException("Problemas actualizando valoracion de libros!!!!");
+               }
+           }  catch (Exception e) {
+               e.printStackTrace(System.err);
+           }
+        }
     }
 
 
@@ -215,11 +333,43 @@ public class LibroDAO {
     }
 
     public void eliminarComentarioLibro(ComentarioVO comentarioVO, Connection connection) {
-        /*TODO*/
+        /* Create "preparedStatement". */
+            String queryString = "DELETE FROM COMENTA " +
+                    "WHERE isbn = ?";
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(queryString);
+            /* Fill "preparedStatement". */
+            preparedStatement.setString(1, comentarioVO.getIsbn());
+
+            /* Execute query. */
+            int insertedRows = preparedStatement.executeUpdate();
+
+            if (insertedRows != 1) {
+                throw new SQLException("Problemas eliminando comentario!!!!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+        }
     }
 
     public void eliminarValoracionLibro(ValoracionVO valoracionVO, Connection connection) {
-        /*TODO*/
+        /* Create "preparedStatement". */
+            String queryString = "DELETE FROM PUNTUA " +
+                    "WHERE isbn = ?";
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(queryString);
+            /* Fill "preparedStatement". */
+            preparedStatement.setString(1, comentarioVO.getIsbn());
+
+            /* Execute query. */
+            int insertedRows = preparedStatement.executeUpdate();
+
+            if (insertedRows != 1) {
+                throw new SQLException("Problemas eliminando valoracion!!!!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+        }
     }
 
 
@@ -322,31 +472,280 @@ public class LibroDAO {
     }
 
     public List<AutorVO> encontrarAutoresLibro(String isbn, Connection connection) {
-        /* TODO */
+        List<AutorVO> resultado = new ArrayList<>();
+        try {
+            AutorVO AutorVO = null;
+            /* Create "preparedStatement". */
+            String queryString = "SELECT NOMBRE_COMPLETO, PAIS_DE_NACIMIENTO, DESCRIPCION " +
+                    "FROM LIBRO L, AUTOR A, WHERE L.ISBN=?";
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(queryString);
+
+            /* Fill "preparedStatement". */
+            preparedStatement.setString(1, isbn);
+
+            /* Execute query. */
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (!resultSet.first()) {
+                throw new SQLException("Autores no encontrados!!!!");
+            }
+
+
+            while (resultSet.next()) {
+                /* Execute query. */
+                String nombre = resultSet.getString(1);
+                String pais = resultSet.getString(2);
+                String descripcion = resultSet.getString(3);
+
+
+                AutorVO = new AutorVO(nombre,pais,descripcion);
+
+                resultado.add(AutorVO);
+            }
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+            System.out.println("Aquí estoy en el DAO y da Error al listar autores");
+
+        }
+        return resultado;
     }
 
     public List<GeneroVO> encontrarGenerosLibro(String isbn, Connection connection) {
-        /* TODO */
+        List<GeneroVO> resultado = new ArrayList<>();
+        try {
+            GeneroVO GeneroVO = null;
+            /* Create "preparedStatement". */
+            String queryString = "SELECT GENERO" +
+                    "FROM PERTENECE_A_GENERO WHERE LIBRO=?";
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(queryString);
+
+            /* Fill "preparedStatement". */
+            preparedStatement.setString(1, isbn);
+
+            /* Execute query. */
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (!resultSet.first()) {
+                throw new SQLException("Género no encontrado!!!!");
+            }
+
+
+            while (resultSet.next()) {
+                /* Execute query. */
+                String nombre = resultSet.getString(1);
+
+
+                GeneroVO = new GeneroVO(nombre);
+
+                resultado.add(GeneroVO);
+            }
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+            System.out.println("Aquí estoy en el DAO y da Error al listar libros");
+
+        }
+        return resultado;
     }
 
     public List<ComentarioVO> encontrarComentariosLibro(String isbn, Connection connection) {
-        /* TODO */
+        List<ComentarioVO> resultado = new ArrayList<>();
+        try {
+            ComentarioVO ComentarioVO = null;
+            /* Create "preparedStatement". */
+            String queryString = "SELECT USUARIO, LIBRO, FECHA, COMENTARIO" +
+                    "FROM COMENTA WHERE LIBRO=?";
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(queryString);
+
+            /* Fill "preparedStatement". */
+            preparedStatement.setString(1, isbn);
+
+            /* Execute query. */
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (!resultSet.first()) {
+                throw new SQLException("Género no encontrado!!!!");
+            }
+
+
+            while (resultSet.next()) {
+                /* Execute query. */
+                String usuario = resultSet.getString(1);
+                String libro = resultSet.getString(2);                
+                String fecha = resultSet.getString(3);
+                String comentario = resultSet.getString(4);
+
+
+                ComentarioVO = new ComentarioVO(usuario,libro,fecha,comentario);
+
+                resultado.add(ComentarioVO);
+            }
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+            System.out.println("Aquí estoy en el DAO y da Error al listar comentarios");
+
+        }
+        return resultado;
     }
 
     public List<ValoracionVO> encontrarValoracionesLibro(String isbn, Connection connection) {
-        /* TODO */
+        List<ValoracionVO> resultado = new ArrayList<>();
+        try {
+            ValoracionVO ValoracionVO = null;
+            /* Create "preparedStatement". */
+            String queryString = "SELECT USUARIO, LIBRO, PUNTUACION" +
+                    "FROM PUNTUA WHERE LIBRO=?";
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(queryString);
+
+            /* Fill "preparedStatement". */
+            preparedStatement.setString(1, isbn);
+
+            /* Execute query. */
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (!resultSet.first()) {
+                throw new SQLException("Género no encontrado!!!!");
+            }
+
+
+            while (resultSet.next()) {
+                /* Execute query. */
+                String usuario = resultSet.getString(1);
+                String libro = resultSet.getString(2);                
+                String puntuacion = resultSet.getString(3);
+
+
+                ValoracionVO = new ValoracionVO(usuario,libro,puntuacion);
+
+                resultado.add(ValoracionVO);
+            }
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+            System.out.println("Aquí estoy en el DAO y da Error al listar comentarios");
+
+        }
+        return resultado;
     }
 
     public List<CompraVO> encontrarVentasLibro(String isbn, Connection connection) {
-        /* TODO */
+        List<CompraVO> resultado = new ArrayList<>();
+        try {
+            CompraVO CompraVO = null;
+            /* Create "preparedStatement". */
+            String queryString = "SELECT USUARIO, LIBRO, FECHA, PRECIO" +
+                    "FROM COMPRA WHERE LIBRO=?";
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(queryString);
+
+            /* Fill "preparedStatement". */
+            preparedStatement.setString(1, isbn);
+
+            /* Execute query. */
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (!resultSet.first()) {
+                throw new SQLException("Compras no encontrado!!!!");
+            }
+
+
+            while (resultSet.next()) {
+                /* Execute query. */
+                String usuario = resultSet.getString(1);
+                String libro = resultSet.getString(2);                
+                String fecha = resultSet.getString(3);
+                String precio = resultSet.getString(4);
+
+
+
+                CompraVO = new CompraVO(usuario,libro,fecha,precio);
+
+                resultado.add(CompraVO);
+            }
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+            System.out.println("Aquí estoy en el DAO y da Error al listar compra");
+
+        }
+        return resultado;
     }
 
     public List<VisitaVO> encontrarVisitasLibro(String isbn, Connection connection) {
-        /* TODO */
+        List<VisitaVO> resultado = new ArrayList<>();
+        try {
+            VisitaVO VisitaVO = null;
+            /* Create "preparedStatement". */
+            String queryString = "SELECT USUARIO, LIBRO, FECHA" +
+                    "FROM COMPRA WHERE LIBRO=?";
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(queryString);
+
+            /* Fill "preparedStatement". */
+            preparedStatement.setString(1, isbn);
+
+            /* Execute query. */
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (!resultSet.first()) {
+                throw new SQLException("Compras no encontrado!!!!");
+            }
+
+
+            while (resultSet.next()) {
+                /* Execute query. */
+                String usuario = resultSet.getString(1);
+                String libro = resultSet.getString(2);                
+                String fecha = resultSet.getString(3);
+
+
+
+                VisitaVO = new VisitaVO(usuario,libro,fecha);
+
+                resultado.add(VisitaVO);
+            }
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+            System.out.println("Aquí estoy en el DAO y da Error al listar visitas");
+
+        }
+        return resultado;
     }
 
     public boolean existeLibro(String isbn, Connection connection){
-        /* TODO */
+        boolean resultado = new boolean;
+        try {
+            CompraVO CompraVO = null;
+            /* Create "preparedStatement". */
+            String queryString = "SELECT COUNT(ISBN)" +
+                    "FROM LIBRO WHERE ISBN=?";
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(queryString);
+
+            /* Fill "preparedStatement". */
+            preparedStatement.setString(1, isbn);
+
+            /* Execute query. */
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (!resultSet.first()) {
+                throw new SQLException("Compras no encontrado!!!!");
+            }
+
+            Integer esta = resultSet.getString(1);
+            if(esta==1){
+            	resultado=true;
+            } else{
+            	resultado=false;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+            System.out.println("Aquí estoy en el DAO y da Error al listar compra");
+
+        }
+        return resultado;
     }
 
 }
