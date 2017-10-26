@@ -2,17 +2,17 @@ package modelo.datos.VO;
 
 import java.util.Calendar;
 
-public class CompraVO {
+public class ValoracionVO {
     private UsuarioVO usuario;
     private LibroVO libro;
     private Calendar fecha;
-    private double precio;
+    private Integer puntuacion;
 
-    public CompraVO(UsuarioVO usuario, LibroVO libro, Calendar fecha, double precio) {
+    public ValoracionVO(UsuarioVO usuario, LibroVO libro, Calendar fecha, Integer puntuacion) {
         this.usuario = usuario;
         this.libro = libro;
         this.fecha = fecha;
-        this.precio = precio;
+        this.puntuacion = puntuacion;
     }
 
     public UsuarioVO getUsuario() {
@@ -39,11 +39,11 @@ public class CompraVO {
         this.fecha = fecha;
     }
 
-    public double getPrecio() {
-        return precio;
+    public Integer getPuntuacion() {
+        return puntuacion;
     }
 
-    public void setPrecio(double precio) {
-        this.precio = precio;
+    public void setPuntuacion(Integer puntuacion) {
+        this.puntuacion = puntuacion;
     }
 }

@@ -62,6 +62,27 @@ public class AutorDAO {
         }
     }
 
+    public void eliminarAutor(AutorVO autor, Connection connection){
+        try{
+            /* Create "preparedStatement". */
+            String queryString = "DELETE autor " +
+                    "WHERE nombre_completo = ?";
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(queryString);
+            /* Fill "preparedStatement". */
+            preparedStatement.setString(1, autor.getNombreCompleto());
+
+            /* Execute query. */
+            int insertedRows = preparedStatement.executeUpdate();
+
+            if (insertedRows != 1) {
+                throw new SQLException( "Problemas eliminando autor!!!!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+        }
+    }
+
     public AutorVO encontrarDatosAutor (String nombre_completo_autor, Connection connection){
         AutorVO usuarioVO = null;
         try{
@@ -94,10 +115,6 @@ public class AutorDAO {
         return usuarioVO;
     }
 
-    public List<LibroVO> encontrarLibrosAutor (String nombre_completo_autor, Connection connection){
-        /* IMPLEMENTAR */
-    }
-
     public List<AutorVO>  encontrarDatosAutor (Connection connection){
         List<AutorVO> resultado = new ArrayList<>();
         try{
@@ -128,6 +145,10 @@ public class AutorDAO {
 
         }
         return resultado;
+    }
+
+    public List<LibroVO> encontrarLibrosAutor (String nombre_completo_autor, Connection connection){
+        /* TODO */
     }
 
 }
