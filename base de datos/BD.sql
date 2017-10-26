@@ -1,5 +1,5 @@
 CREATE TABLE libro(
-	isbn INTEGER PRIMARY KEY,
+	isbn STRING PRIMARY KEY,
 	editorial VARCHAR(50),
 	titulo VARCHAR(50),
 	pais_de_publicacion VARCHAR(50),
