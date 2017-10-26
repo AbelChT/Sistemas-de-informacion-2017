@@ -3,15 +3,15 @@ package modelo.datos.DAO;
 import modelo.datos.VO.AutorVO;
 import modelo.datos.VO.LibroVO;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
+import java.sql.*;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class AutorDAO {
-    public void insertarAutor (AutorVO autor, Connection connection) {
+    public static void insertarAutor (AutorVO autor, Connection connection) {
         try{
             /* Create "preparedStatement". */
             String queryString = "INSERT INTO autor " +
@@ -38,7 +38,7 @@ public class AutorDAO {
         }
     }
 
-    public void actualizarAutor (AutorVO autor, Connection connection) {
+    public static void actualizarAutor (AutorVO autor, Connection connection) {
         try{
             /* Create "preparedStatement". */
             String queryString = "UPDATE autor " +
@@ -62,7 +62,7 @@ public class AutorDAO {
         }
     }
 
-    public void eliminarAutor(AutorVO autor, Connection connection){
+    public static void eliminarAutor(AutorVO autor, Connection connection){
         try{
             /* Create "preparedStatement". */
             String queryString = "DELETE autor " +
@@ -83,7 +83,7 @@ public class AutorDAO {
         }
     }
 
-    public AutorVO encontrarDatosAutor (String nombre_completo_autor, Connection connection){
+    public static AutorVO encontrarDatosAutor (String nombre_completo_autor, Connection connection){
         AutorVO usuarioVO = null;
         try{
             /* Create "preparedStatement". */
@@ -99,7 +99,7 @@ public class AutorDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (!resultSet.first()) {
-                throw new SQLException( "Usuario no encontrado!!!!");
+                throw new SQLException( "Autor no encontrado!!!!");
             }
 
             /* Execute query. */
@@ -115,7 +115,7 @@ public class AutorDAO {
         return usuarioVO;
     }
 
-    public List<AutorVO>  encontrarDatosAutor (Connection connection){
+    public static List<AutorVO>  encontrarDatosAutor (Connection connection){
         List<AutorVO> resultado = new ArrayList<>();
         try{
             AutorVO autorVO = null;
@@ -134,25 +134,74 @@ public class AutorDAO {
                 String pais_de_nacimiento = resultSet.getString(2);
                 String descripcion = resultSet.getString(3);
 
-                System.out.println("Leyendo usuario "+ nombre_completo);
+                System.out.println("Leyendo autor "+ nombre_completo);
                 autorVO = new AutorVO (nombre_completo, pais_de_nacimiento,
                         descripcion);
                 resultado.add(autorVO);
             }
         } catch (Exception e) {
             e.printStackTrace(System.err);
-            System.out.println("Aquí estoy en el DAO y da Error al listar usuariao");
+            System.out.println("Aquí estoy en el DAO y da Error al listar autor");
 
         }
         return resultado;
     }
 
-    public List<LibroVO> encontrarLibrosAutor (String nombre_completo_autor, Connection connection){
-        /* TODO */
+    public static List<LibroVO> encontrarLibrosAutor (String nombre_completo_autor, Connection connection){
+        List<LibroVO> list = new ArrayList<>();
+        try{
+            /* Create "preparedStatement". */
+            String queryString = "SELECT LIBRO.ISBN ,LIBRO.EDITORIAL, LIBRO.TITULO, LIBRO.PAIS_DE_PUBLICACION, LIBRO.PRECIO, LIBRO.NUMERO_PAGINAS, LIBRO.NUMERO_DE_EDICION, LIBRO.IDIOMA, LIBRO.DESCRICION, LIBRO.DESCRICION_CORTA, LIBRO.TITULO_ORIGINAL, LIBRO.FECHA_DE_PUBLICACION " +
+                    "FROM ESCRITO_POR "+
+                    "INNER JOIN LIBRO ON libro.isbn = ESCRITO_POR.libro "+
+                    "WHERE ESCRITO_POR.AUTOR = ?";
+
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(queryString);
+
+            /* Fill "preparedStatement". */
+            preparedStatement.setString(1, nombre_completo_autor);
+
+            /* Execute query. */
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+            	/* Execute query. */
+                String isbn  = resultSet.getString(1);
+
+                String editorial = resultSet.getString(2);
+                String titulo = resultSet.getString(3);
+                String pais_de_publicacion = resultSet.getString(4);
+                Double precio = resultSet.getDouble(5);
+                Integer numero_paginas = resultSet.getInt(6);
+                Integer numero_edicion = resultSet.getInt(7);
+                String idioma = resultSet.getString(8);
+                String descripcion = resultSet.getString(9);
+                String descripcion_corta = resultSet.getString(10);
+                String titulo_original = resultSet.getString(11);
+
+                Date fecha_de_publicacion_date = resultSet.getDate(12);
+                Calendar fecha_de_publicacion;
+                fecha_de_publicacion = new GregorianCalendar();
+
+                if (fecha_de_publicacion_date != null) {
+                    fecha_de_publicacion.setTime(fecha_de_publicacion_date);
+                }
+
+                LibroVO libroVO = new LibroVO(isbn, editorial, titulo, pais_de_publicacion, precio, numero_paginas, numero_edicion, idioma,
+                        descripcion, descripcion_corta, titulo_original, fecha_de_publicacion);
+
+                list.add(libroVO);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+        }
+        return list;
     }
 
     public boolean existeAutor(String nombre_completo, Connection connection){
-        /* TODO */
+        return encontrarDatosAutor(nombre_completo,connection)!=null;
     }
 
 }

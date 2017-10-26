@@ -10,7 +10,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 public class UsuarioDAO {
-    public void insertarUsuario (UsuarioVO usuario, Connection connection) {
+    public static void insertarUsuario (UsuarioVO usuario, Connection connection) {
         try{
             /* Create "preparedStatement". */
             String queryString = "INSERT INTO USUARIO " +
@@ -43,7 +43,7 @@ public class UsuarioDAO {
         }
     }
 
-    public void insertarCompraLibro(CompraVO compraVO, Connection connection){
+    public static void insertarCompraLibro(CompraVO compraVO, Connection connection){
         if (compraVO.getLibro() != null && compraVO.getUsuario() != null && compraVO.getFecha() != null && compraVO.getPrecio() != null) {
             try {
                 String queryString = "INSERT INTO COMPRA " +
@@ -71,7 +71,7 @@ public class UsuarioDAO {
         }
     }
 
-    public void insertarVisitaLibro(VisitaVO visitaVO, Connection connection){
+    public static void insertarVisitaLibro(VisitaVO visitaVO, Connection connection){
         if (visitaVO.getLibro() != null && visitaVO.getUsuario() != null && visitaVO.getFecha() != null) {
             try {
                 String queryString = "INSERT INTO VISITA" +
@@ -99,7 +99,7 @@ public class UsuarioDAO {
         }
     }
 
-    public void actualizarUsuario (UsuarioVO usuario, Connection connection) {
+    public static void actualizarUsuario (UsuarioVO usuario, Connection connection) {
         try{
             /* Create "preparedStatement". */
             String queryString = "UPDATE USUARIO " +
@@ -129,7 +129,7 @@ public class UsuarioDAO {
         }
     }
 
-    public void actualizarCompraLibro(CompraVO compraVO, Connection connection){
+    public static void actualizarCompraLibro(CompraVO compraVO, Connection connection){
         if (compraVO.getLibro() != null && compraVO.getUsuario() != null && compraVO.getFecha() != null && compraVO.getPrecio() != null) {
             try {
                 String queryString = "UPDATE COMPRA " +
@@ -157,7 +157,7 @@ public class UsuarioDAO {
         }
     }
 
-    public void actualizarVisitaLibro(VisitaVO visitaVO, Connection connection){
+    public static void actualizarVisitaLibro(VisitaVO visitaVO, Connection connection){
         if (visitaVO.getLibro() != null && visitaVO.getUsuario() != null && visitaVO.getFecha() != null) {
             try {
                 String queryString = "UPDATE VISITA " +
@@ -185,7 +185,7 @@ public class UsuarioDAO {
         }
     }
 
-    public void eliminarUsuario(UsuarioVO usuario, Connection connection){
+    public static void eliminarUsuario(UsuarioVO usuario, Connection connection){
         try{
             /* Create "preparedStatement". */
             String queryString = "DELETE FROM USUARIO " +
@@ -206,7 +206,7 @@ public class UsuarioDAO {
         }
     }
 
-    public void eliminarCompraLibro(CompraVO compraVO, Connection connection){
+    public static void eliminarCompraLibro(CompraVO compraVO, Connection connection){
         if (compraVO.getLibro() != null && compraVO.getUsuario() != null) {
             try{
             /* Create "preparedStatement". */
@@ -230,7 +230,7 @@ public class UsuarioDAO {
         }
     }
 
-    public void eliminarVisitaLibro(VisitaVO visitaVO, Connection connection){
+    public static void eliminarVisitaLibro(VisitaVO visitaVO, Connection connection){
         if (visitaVO.getLibro() != null && visitaVO.getUsuario() != null) {
             try{
             /* Create "preparedStatement". */
@@ -254,7 +254,7 @@ public class UsuarioDAO {
         }
     }
 
-    public UsuarioVO encontrarDatosUsuario (String nombre_user, Connection connection){
+    public static UsuarioVO encontrarDatosUsuario (String nombre_user, Connection connection){
         UsuarioVO usuarioVO = null;
         try{
             /* Create "preparedStatement". */
@@ -299,7 +299,7 @@ public class UsuarioDAO {
         return usuarioVO;
     }
 
-    public List<UsuarioVO>  encontrarDatosUsuario (Connection connection){
+    public static List<UsuarioVO>  encontrarDatosUsuario (Connection connection){
         List<UsuarioVO> resultado = new ArrayList<>();
         try{
             UsuarioVO usuarioVO = null;
@@ -347,7 +347,7 @@ public class UsuarioDAO {
 
 
 
-    public List<ComentarioVO> encontrarComentariosRealizados (String nombre_usuario, Connection connection){
+    public static List<ComentarioVO> encontrarComentariosRealizados (String nombre_usuario, Connection connection){
 
         List<ComentarioVO> list = new ArrayList<>();
         try{
@@ -382,7 +382,7 @@ public class UsuarioDAO {
         return list;
     }
 
-    public List<ValoracionVO> encontrarValoracionesRealizadas (String nombre_usuario, Connection connection){
+    public static List<ValoracionVO> encontrarValoracionesRealizadas (String nombre_usuario, Connection connection){
         List<ValoracionVO> list = new ArrayList<>();
         try{
             /* Create "preparedStatement". */
@@ -414,7 +414,7 @@ public class UsuarioDAO {
         return list;
     }
 
-    public List<CompraVO> encontrarComprasRealizadas (String nombre_usuario, Connection connection){
+    public static List<CompraVO> encontrarComprasRealizadas (String nombre_usuario, Connection connection){
         List<CompraVO> list = new ArrayList<>();
         try{
             /* Create "preparedStatement". */
@@ -448,7 +448,7 @@ public class UsuarioDAO {
         return list;
     }
 
-    public List<VisitaVO> encontrarVisitasRealizadas (String nombre_usuario, Connection connection){
+    public static List<VisitaVO> encontrarVisitasRealizadas (String nombre_usuario, Connection connection){
         List<VisitaVO> list = new ArrayList<>();
         try{
             /* Create "preparedStatement". */
@@ -481,7 +481,7 @@ public class UsuarioDAO {
         return list;
     }
 
-    public boolean existeUsuario(String nombreusuario, Connection connection){
+    public static boolean existeUsuario(String nombreusuario, Connection connection){
         return encontrarDatosUsuario(nombreusuario,connection) != null;
     }
 

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GeneroDAO {
-    public void insertarGenero (GeneroVO genero, Connection connection) {
+    public static void insertarGenero (GeneroVO genero, Connection connection) {
         try{
             /* Create "preparedStatement". */
             String queryString = "INSERT INTO GENERO " +
@@ -35,7 +35,7 @@ public class GeneroDAO {
         }
     }
 
-    public void eliminarGenero(GeneroVO genero, Connection connection){
+    public static void eliminarGenero(GeneroVO genero, Connection connection){
         try{
             /* Create "preparedStatement". */
             String queryString = "DELETE genero " +
@@ -56,7 +56,7 @@ public class GeneroDAO {
         }
     }
 
-    public List<GeneroVO>  encontrarGeneros (Connection connection){
+    public static List<GeneroVO>  encontrarGeneros (Connection connection){
         List<GeneroVO> resultado = new ArrayList<>();
         try{
             GeneroVO generoVO = null;
@@ -85,7 +85,27 @@ public class GeneroDAO {
         return resultado;
     }
 
-    public boolean existeGenero(String nombre, Connection connection){
-        /* TODO */
+    public static boolean existeGenero(String nombre, Connection connection){
+        try{
+            String queryString = "SELECT NOMBRE " +
+                    "FROM GENERO WHERE  NOMBRE = ?";
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(queryString);
+
+            /* Fill "preparedStatement". */
+            preparedStatement.setString(1, nombre);
+
+            /* Execute query. */
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (!resultSet.first()) {
+                throw new SQLException( "Genero no encontrado!!!!");
+            }
+
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+            return false;
+        }
     }
 }
