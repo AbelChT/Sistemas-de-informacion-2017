@@ -27,7 +27,7 @@ CREATE TABLE pertenece_al_genero(
 
 
 CREATE TABLE libro_en_oferta(
-	libro VARCHAR(150) REFERENCES libro(isbn) PRIMARY KEY ON DELETE CASCADE,
+	libro VARCHAR(150) PRIMARY KEY  REFERENCES libro(isbn) ON DELETE CASCADE,
 	porcentaje_rebaja REAL NOT NULL CHECK ((porcentaje_rebaja > 0.0) AND (porcentaje_rebaja < 100.0))
 );
 
