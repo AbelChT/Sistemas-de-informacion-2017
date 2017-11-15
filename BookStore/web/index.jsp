@@ -1,13 +1,13 @@
-<%@ page import="static com.bookstore.modelo.TiendaFacade.listarLibrosMasPopulares" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.bookstore.modelo.VO.LibroVO" %>
 <%@ page import="com.bookstore.modelo.VO.AutorVO" %>
-<%@ page import="static com.bookstore.modelo.TiendaFacade.listarLibrosMasVendidos" %>
-<%@ page import="static com.bookstore.modelo.TiendaFacade.listarLibrosNovedades" %>
 <%@ page import="static com.bookstore.modelo.TiendaFacade.*" %>
 <%@ page import="javafx.util.Pair" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="com.bookstore.controlador.CommonConstants" %>
+<%@ page import="com.bookstore.modelo.VO.GeneroVO" %>
+<%@ page import="com.bookstore.modelo.TiendaFacade" %>
+<%@ page import="com.bookstore.modelo.VO.UsuarioVO" %>
 <%--
   Created by Abel
   Date: 13/11/2017
@@ -19,43 +19,46 @@
 
     List<Pair<String, List<LibroVO>>> carruseles = new ArrayList<>();
 
-    String pagina = request.getParameter("page");
+    String username = (String) session.getAttribute(CommonConstants.usernameParameterName);
+
+    String pagina = request.getParameter(CommonConstants.pageStatusParameterName);
     if (pagina == null) pagina = "";
+    
     try {
         switch (pagina) {
-            case "maspopulares":
+            case CommonConstants.indexMasBuscadosPageStatus:
                 titulo_pagina = "Libros más populares";
-                carruseles.add(new Pair<>("Más vendidos esta semana", listarLibrosMasVendidosEstaSemana()));
-                carruseles.add(new Pair<>("Más visitados esta semana", listarLibrosMasPopularesEstaSemana()));
-                carruseles.add(new Pair<>("Más vendidos", listarLibrosMasVendidos()));
+                carruseles.add(new Pair<>("Más vendidos", listarLibros(CategoriaLibrosListar.MAS_VENDIDOS, null, 6)));
+                carruseles.add(new Pair<>("Más vendidos esta semana", listarLibros(CategoriaLibrosListar.MAS_VENDIDOS, RangosTiempoLibrosListar.ESTA_SEMANA , 6)));
+                carruseles.add(new Pair<>("Más vendidos este mes", listarLibros(CategoriaLibrosListar.MAS_VENDIDOS, RangosTiempoLibrosListar.ESTE_MES , 6)));
+                carruseles.add(new Pair<>("Más visitados", listarLibros(CategoriaLibrosListar.MAS_VISITADOS, null, 6)));
+                carruseles.add(new Pair<>("Más visitados esta semana", listarLibros(CategoriaLibrosListar.MAS_VISITADOS, RangosTiempoLibrosListar.ESTA_SEMANA , 6)));
+                carruseles.add(new Pair<>("Más visitados este mes", listarLibros(CategoriaLibrosListar.MAS_VISITADOS, RangosTiempoLibrosListar.ESTE_MES , 6)));
                 break;
-            case "novedades":
+            case CommonConstants.indexNovedadesPageStatus:
                 titulo_pagina = "Novedades";
-                carruseles.add(new Pair<>("Nuevos", listarLibrosNuevos()));
-                carruseles.add(new Pair<>("Autores nuevos", listarLibrosAutoresNuevos()));
-                carruseles.add(new Pair<>("Más vendidos", listarLibrosMasVendidos()));
+                carruseles.add(new Pair<>("Últimas publicaciones", listarLibros(CategoriaLibrosListar.NUEVOS, null , 6)));
+                carruseles.add(new Pair<>("Publicados esta semana", listarLibros(CategoriaLibrosListar.NUEVOS, RangosTiempoLibrosListar.ESTA_SEMANA , 6)));
+                carruseles.add(new Pair<>("Publicados este mes", listarLibros(CategoriaLibrosListar.NUEVOS, RangosTiempoLibrosListar.ESTE_MES , 6)));
                 break;
             default:
                 titulo_pagina = "Inicio";
-                carruseles.add(new Pair<>("Más vendidos", listarLibrosMasVendidos()));
-                carruseles.add(new Pair<>("Populares", listarLibrosMasPopulares()));
-                carruseles.add(new Pair<>("Novedades", listarLibrosNovedades()));
+                if (username != null)
+                carruseles.add(new Pair<>("Recomendaciones", listarLibros(CategoriaLibrosListar.RECOMENDACIONES, null, new UsuarioVO(username), 6)));
+
+                carruseles.add(new Pair<>("Más vendidos", listarLibros(CategoriaLibrosListar.MAS_VENDIDOS, null, 6)));
+                carruseles.add(new Pair<>("Populares", listarLibros(CategoriaLibrosListar.MAS_VISITADOS, null, 6)));
+                carruseles.add(new Pair<>("Novedades", listarLibros(CategoriaLibrosListar.NUEVOS, null, 6)));
         }
     } catch (Exception e) {
         response.sendRedirect("/error/");
     }
 
-    String href_todos_los_productos = "listalibros.jsp";
-
     List<Pair<String, String>> generos = new ArrayList<>();
-    generos.add(new Pair<>("Ciencia", href_todos_los_productos + "?gen=" + "ciencia"));
-    generos.add(new Pair<>("Ficción y literatura", href_todos_los_productos + "?gen=" + "ciencia"));
-    generos.add(new Pair<>("Finanzas e inversión", href_todos_los_productos + "?gen=" + "ciencia"));
-    generos.add(new Pair<>("Historia", href_todos_los_productos + "?gen=" + "ciencia"));
-    generos.add(new Pair<>("Informática y tecnología", href_todos_los_productos + "?gen=" + "ciencia"));
-    generos.add(new Pair<>("Infantiles", href_todos_los_productos + "?gen=" + "ciencia"));
-    generos.add(new Pair<>("Psicología", href_todos_los_productos + "?gen=" + "ciencia"));
 
+    for (GeneroVO i : TiendaFacade.listarGeneros()){
+        generos.add(new Pair<>( i.getNombre(),CommonConstants.browserLocation + "?" +CommonConstants.browserCategoryParameterName + "=" + i.getNombre()));
+    }
 
 %>
 <html>
@@ -98,12 +101,11 @@
             <li class="nav-item"><a href="<%= CommonConstants.indexLocation + "?" + CommonConstants.pageStatusParameterName + "=" + CommonConstants.indexMasBuscadosPageStatus %>">Más populares </a></li>
             <li class="nav-item"><a href="<%=  CommonConstants.indexLocation + "?" + CommonConstants.pageStatusParameterName + "=" + CommonConstants.indexNovedadesPageStatus %>">Novedades </a></li>
 
-            <li class="nav-item"><a>Buscar</a></li>
+            <li class="nav-item"><a href="#search">Buscar</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
 
             <%
-                String username = (String) session.getAttribute(CommonConstants.usernameParameterName);
                 if (username != null) {%>
 
             <li class="dropdown nav-item"><a class="dropdown-toggle" data-toggle="dropdown" href=""><%= username%> <span
@@ -151,8 +153,8 @@
                     }
             %>
             <div class='item'>
-                <a href="LibroExtendido.html<%= i.getIsbn() %>"><img class="carrousel-element-image"
-                                                                     src="<%= i.getPathImagen() %>"></a>
+                <a href="<%= CommonConstants.libroInfoLocation + "?" + CommonConstants.isbnParameterName + "=" + i.getIsbn() %>"><img class="carrousel-element-image"
+                   src="<%= i.getPathImagen() %>"></a>
                 <h3 class="carrousel-element-titulo"><%= i.getTitulo() %>
                 </h3>
                 <h4 class="carrousel-element-autor"><%= autores %>
@@ -163,6 +165,14 @@
     </div>
 </div>
 <%}%>
+
+<div id="search">
+    <button type="button" class="close">×</button>
+    <form  role="form" action="<%= CommonConstants.browserLocation %>" method="get">
+        <input type="search" value="" name="<%= CommonConstants.browserBookNameParameterName %>" placeholder="Introduce el nombre de un libro" />
+        <input class="btn btn-primary" value="Buscar" type="submit">
+    </form>
+</div>
 
 <script type="text/javascript" src="/js/script.js"></script>
 

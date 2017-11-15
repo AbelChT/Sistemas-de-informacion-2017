@@ -18,7 +18,7 @@ public class LoginManager extends HttpServlet {
         String username= request.getParameter(CommonConstants.usernameParameterName);
         String password= request.getParameter(CommonConstants.passwordParameterName);
 
-        if(username != null && password !=null && TiendaFacade.authentication_test(username, password)){
+        if(username != null && password !=null && TiendaFacade.authenticate(username, password)){
             request.getSession(true).setAttribute(CommonConstants.usernameParameterName,username);
             response.sendRedirect(CommonConstants.profileLocation);
 

@@ -27,6 +27,10 @@ public class UsuarioVO {
         this.numero_de_cuenta_bancaria = numero_de_cuenta_bancaria;
     }
 
+    public UsuarioVO(String nombre_de_usuario) {
+        this.nombre_de_usuario = nombre_de_usuario;
+    }
+
     public String getNombreDeUsuario() {
         return nombre_de_usuario;
     }

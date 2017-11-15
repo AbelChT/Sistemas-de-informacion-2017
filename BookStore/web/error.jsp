@@ -1,8 +1,10 @@
 <%@ page import="javafx.util.Pair" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.bookstore.modelo.VO.LibroVO" %>
-<%@ page import="static com.bookstore.modelo.TiendaFacade.listarLibrosNuevos" %><%--
+<%@ page import="com.bookstore.controlador.CommonConstants" %>
+<%@ page import="com.bookstore.modelo.VO.GeneroVO" %>
+<%@ page import="com.bookstore.modelo.TiendaFacade" %>
+<%--
   Created by IntelliJ IDEA.
   User: Abel
   Date: 14/11/2017
@@ -12,22 +14,17 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     String error_type = request.getParameter("error_type");
-    // Problemas de seguridad
-    //http://localhost:8080/listalibros.jsp?gen=ciencia<br><br><br><br><br><br>
     if (error_type == null) error_type = "404";
 
-    String titulo_pagina = "Error ";
+    String titulo_pagina = "Error " + error_type;
+    
+    String username = (String) session.getAttribute(CommonConstants.usernameParameterName);
+    
     List<Pair<String, String>> generos = new ArrayList<>();
-    generos.add(new Pair<>("Ciencia", "#"));
-    generos.add(new Pair<>("Ficción y literatura", "#"));
-    generos.add(new Pair<>("Finanzas e inversión", "#"));
-    generos.add(new Pair<>("Historia", "#"));
-    generos.add(new Pair<>("Informática y tecnología", "#"));
-    generos.add(new Pair<>("Infantiles", "#"));
-    generos.add(new Pair<>("Psicología", "#"));
 
-    String label_login = "Acceder";
-    String href_login = "Login.html";
+    for (GeneroVO i : TiendaFacade.listarGeneros()){
+        generos.add(new Pair<>( i.getNombre(),CommonConstants.browserLocation + "?" +CommonConstants.browserCategoryParameterName + "=" + i.getNombre()));
+    }
 
 %>
 <html>
@@ -55,8 +52,9 @@
 <nav class="navbar navbar-expand-lg bg-transp font-roboto">
     <div class="navbar-collapse">
         <ul class="nav navbar-nav">
-            <li class="dropdown nav-item"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Todos los productos <span
-                    class="caret"></span></a>
+            <li class="dropdown nav-item"><a class="dropdown-toggle" data-toggle="dropdown" href="">Todos los productos
+                <span
+                        class="caret"></span></a>
                 <ul class="dropdown-menu">
                     <% for (Pair<String, String> genero : generos) {%>
                     <li><a href="<%= genero.getValue() %>"><%= genero.getKey() %>
@@ -65,15 +63,31 @@
                 </ul>
             </li>
 
-            <li class="nav-item"><a href="/">Inicio </a></li>
-            <li class="nav-item"><a href="/?page=maspopulares">Más populares </a></li>
-            <li class="nav-item"><a href="/?page=novedades">Novedades </a></li>
+            <li class="nav-item"><a href="<%= CommonConstants.indexLocation %>">Inicio </a></li>
+            <li class="nav-item"><a href="<%= CommonConstants.indexLocation + "?" + CommonConstants.pageStatusParameterName + "=" + CommonConstants.indexMasBuscadosPageStatus %>">Más populares </a></li>
+            <li class="nav-item"><a href="<%=  CommonConstants.indexLocation + "?" + CommonConstants.pageStatusParameterName + "=" + CommonConstants.indexNovedadesPageStatus %>">Novedades </a></li>
 
-            <li class="nav-item"><a>Buscar</a></li>
+            <li class="nav-item"><a href="#search">Buscar</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-            <li class="nav-item"><a href="<%= href_login%>"><%= label_login%>
-            </a></li>
+
+            <%
+                if (username != null) {%>
+
+            <li class="dropdown nav-item"><a class="dropdown-toggle" data-toggle="dropdown" href=""><%= username%> <span
+                    class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="<%= CommonConstants.profileLocation %>">Ver Perfil</a></li>
+                    <li><a href="<%= CommonConstants.logoutLocation %>">Desconectarse</a></li>
+
+                </ul>
+            </li>
+
+            <%} else {%>
+            <li class="nav-item"><a href="<%= CommonConstants.loginLocation%>">Acceder </a></li>
+            <%}%>
+
+
         </ul>
     </div>
 </nav>
@@ -81,6 +95,16 @@
 <div class="container-fluid center-block">
     <h1>Error: <%= error_type%></h1>
 </div>
+
+<div id="search">
+    <button type="button" class="close">×</button>
+    <form  role="form" action="<%= CommonConstants.browserLocation %>" method="get">
+        <input type="search" value="" name="<%= CommonConstants.browserBookNameParameterName %>" placeholder="Introduce el nombre de un libro" />
+        <input class="btn btn-primary" value="Buscar" type="submit">
+    </form>
+</div>
+
+<script type="text/javascript" src="/js/script.js"></script>
 
 </body>
 </html>

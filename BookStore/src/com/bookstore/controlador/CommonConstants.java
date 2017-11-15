@@ -10,9 +10,11 @@ public class CommonConstants {
     public final static String profileLocation = "/";
     public final static String logoutLocation = "/logout/";
     public final static String browserLocation = "/browser/";
+    public final static String libroInfoLocation = "/libro/";
 
     public final static String usernameParameterName = "username";
     public final static String passwordParameterName = "password";
+    public final static String isbnParameterName = "isbn";
 
     // Page comunication constast
 
@@ -21,7 +23,12 @@ public class CommonConstants {
 
     // Index Page
     public final static String indexMasBuscadosPageStatus = "masBuscados";
-    public final static String indexNovedadesPageStatus = "masBuscados";
+    public final static String indexNovedadesPageStatus = "novedades";
+
+    // Browser page
+    public final static String browserBookNameParameterName = "nombreLibro";
+    public final static String browserCategoryParameterName = "categoria";
+    public final static String browserPageNumberParameterName = "pageNumber";
 
     // Profile Page
 
