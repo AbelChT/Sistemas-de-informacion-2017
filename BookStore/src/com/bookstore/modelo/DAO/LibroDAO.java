@@ -254,6 +254,80 @@ public class LibroDAO {
         return resultado;
     }
 
+    public static List<LibroVO> encontrarDatosLibrosRecomendados(String username, Integer num_libros, Connection connection) {
+        List<LibroVO> resultado = new ArrayList<>();
+        try {
+            LibroVO libroVO = null;
+        /* Create "preparedStatement". */
+            String queryString = "SELECT H.ISBN, H.EDITORIAL, H.TITULO, H.PAIS_DE_PUBLICACION, H.PRECIO, H.NUMERO_PAGINAS, H.NUMERO_DE_EDICION, H.IDIOMA, H.DESCRICION, H.DESCRICION_CORTA, H.TITULO_ORIGINAL, H.FECHA_DE_PUBLICACION, H.IMAGEN " +
+                    "FROM libro H " +
+                    "INNER JOIN (SELECT C.libro , SUM(D.VALORACION) " +
+                    "            FROM (SELECT B.usuario AS usuario , COUNT(*) AS VALORACION " +
+                    "                  FROM sistInfBD.compra A " +
+                    "                  INNER JOIN sistInfBD.compra B ON A.libro = B.libro " +
+                    "                  WHERE  A.usuario != B.usuario AND A.usuario = ? " +
+                    "                  GROUP BY B.usuario) D " +
+                    "            INNER JOIN sistInfBD.compra C ON C.usuario = D.usuario " +
+                    "            WHERE NOT EXISTS( " +
+                    "                  SELECT * " +
+                    "                  FROM sistInfBD.compra F " +
+                    "                  WHERE F.usuario = ? AND F.libro = C.libro " +
+                    "                  ) " +
+                    "GROUP BY C.libro " +
+                    "ORDER BY SUM(D.VALORACION) DESC " +
+                    "LIMIT 0,?) G ON G.libro = H.isbn;";
+
+
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(queryString);
+
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, username);
+            preparedStatement.setInt(3, num_libros);
+
+
+
+        /* Execute query. */
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+            /* Execute query. */
+                String isbn = resultSet.getString(1);
+                String editorial = resultSet.getString(2);
+                String titulo = resultSet.getString(3);
+                String pais_de_publicacion = resultSet.getString(4);
+                Double precio = resultSet.getDouble(5);
+                Integer numero_paginas = resultSet.getInt(6);
+                Integer numero_edicion = resultSet.getInt(7);
+                String idioma = resultSet.getString(8);
+                String descripcion = resultSet.getString(9);
+                String descripcion_corta = resultSet.getString(10);
+                String titulo_original = resultSet.getString(11);
+
+                Date fecha_de_publicacion_date = resultSet.getDate(12);
+                Calendar fecha_de_publicacion;
+                fecha_de_publicacion = new GregorianCalendar();
+
+                if (fecha_de_publicacion_date != null) {
+                    fecha_de_publicacion.setTime(fecha_de_publicacion_date);
+                }
+
+                String imagen = resultSet.getString(13);
+
+
+                libroVO = new LibroVO(isbn, editorial, titulo, pais_de_publicacion, precio, numero_paginas, numero_edicion, idioma,
+                        descripcion, descripcion_corta, titulo_original, fecha_de_publicacion, imagen);
+
+                resultado.add(libroVO);
+            }
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+            System.out.println("Aquí estoy en el DAO y da Error al listar libros");
+
+        }
+        return resultado;
+    }
+
     // Correcto
     public static List<LibroVO> encontrarDatosLibrosMasVisitados(Date fecha_limite, Integer num_libros, Connection connection) {
         List<LibroVO> resultado = new ArrayList<>();

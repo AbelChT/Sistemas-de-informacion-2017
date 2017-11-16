@@ -45,8 +45,22 @@ public class TiendaFacade {
 
     // TODO:La primera componente son los resultados y la segunda el numero de conjuntos de esos resultados que se podrían devolver
     public static List<LibroVO> listarLibrosRecomendados(UsuarioVO usuario, Integer num_libros) throws SQLException {
+        Connection connection = null;
+        List<LibroVO> listado = null;
+        try {
+            System.out.println("En la fachada voy a pedir una conexión");
+            connection = GestorDeConexionesBD.getConnection();
+            System.out.println("En la fachada voy a llamar al DAO");
+            listado = LibroDAO.encontrarDatosLibrosRecomendados(usuario.getNombreDeUsuario(), 10,connection );
+            System.out.println("En la fachada despues de encontrar en a llamar al DAO");
 
-        return listarLibros(CategoriaLibrosListar.NUEVOS, null, num_libros);
+        } catch (Exception e) {
+            System.out.println("Excepción en el método de la fachada y no lanza hacia arriba");
+            e.printStackTrace(System.err);
+        } finally {
+            connection.close();
+        }
+        return listado;
 
     }
 
