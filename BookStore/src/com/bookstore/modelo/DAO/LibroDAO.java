@@ -10,6 +10,9 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 public class LibroDAO {
+
+
+
     public static void insertarLibro(LibroVO libro, Connection connection) {
         try {
             /* Create "preparedStatement". */
@@ -46,195 +49,389 @@ public class LibroDAO {
         }
     }
 
-    // Pre: El autor ha de estar
-    public static void insertarAutorLibro(LibroVO libro, AutorVO autorVO, Connection connection) {
+    // Correcto
+    public static List<LibroVO> encontrarDatosLibros(String pattern, Integer inicio, Integer num_libros, Connection connection) {
+        List<LibroVO> resultado = new ArrayList<>();
         try {
+            LibroVO libroVO = null;
+        /* Create "preparedStatement". */
+            String queryString = "SELECT ISBN, EDITORIAL, TITULO, PAIS_DE_PUBLICACION, PRECIO, NUMERO_PAGINAS, NUMERO_DE_EDICION, IDIOMA, DESCRICION, DESCRICION_CORTA, TITULO_ORIGINAL, FECHA_DE_PUBLICACION, IMAGEN " +
+                    "FROM sistInfBD.libro " +
+                    "WHERE TITULO LIKE '%" + pattern + "%' OR ISBN LIKE '%" + pattern + "%' " +
+                    "LIMIT " + Integer.toString(inicio) + ", " + Integer.toString(num_libros) + "; ";
 
-                     /* Create "preparedStatement". */
-                String queryString = "INSERT INTO ESCRITO_POR " +
-                        "(AUTOR,LIBRO) " +
-                        "VALUES (?,?)";
-
-                PreparedStatement preparedStatement =
-                        connection.prepareStatement(queryString);
-
-            /* Fill "preparedStatement". */
-                preparedStatement.setString(1, autorVO.getNombreCompleto());
-                preparedStatement.setString(2, libro.getIsbn());
-
-
-            /* Execute query. */
-                int insertedRows = preparedStatement.executeUpdate();
-
-                if (insertedRows != 1) {
-                    throw new SQLException("Problemas insertando autor de libros!!!!");
-                }
-
-
-
-        } catch (Exception e) {
-            e.printStackTrace(System.err);
-        }
-    }
-
-    public static void insertarGeneroLibro(LibroVO libro, GeneroVO generoVO, Connection connection) {
-        try {
-            if (libro.getGeneros() != null) {
-
-                    String queryString = "INSERT INTO PERTENECE_AL_GENERO " +
-                            "(LIBRO, GENERO) " +
-                            "VALUES (?,?)";
-
-                    PreparedStatement preparedStatement =
-                            connection.prepareStatement(queryString);
-
-            /* Fill "preparedStatement". */
-                    preparedStatement.setString(1, libro.getIsbn());
-                    preparedStatement.setString(2, generoVO.getNombre());
-
-
-            /* Execute query. */
-                    int insertedRows = preparedStatement.executeUpdate();
-
-                    if (insertedRows != 1) {
-                        throw new SQLException("Problemas insertando generos de libros!!!!");
-                    }
-                }
-
-        } catch (Exception e) {
-            e.printStackTrace(System.err);
-        }
-    }
-
-
-    public static void insertarComentarioLibro(ComentarioVO comentarioVO, Connection connection) {
-        if (comentarioVO.getLibro() != null && comentarioVO.getUsuario() != null && comentarioVO.getFecha() != null && comentarioVO.getComentario() != null) {
-               try {
-                   String queryString = "INSERT INTO COMENTA " +
-                           "(USUARIO, LIBRO, FECHA, COMENTARIO) " +
-                           "VALUES (?,?,?,?)";
-
-                   PreparedStatement preparedStatement =
-                           connection.prepareStatement(queryString);
-
-            /* Fill "preparedStatement". */
-                   preparedStatement.setString(1, comentarioVO.getUsuario().getNombreDeUsuario());
-                   preparedStatement.setString(2, comentarioVO.getLibro().getIsbn());
-                   preparedStatement.setDate(3, new java.sql.Date(comentarioVO.getFecha().getTimeInMillis()));
-                   preparedStatement.setString(4, comentarioVO.getComentario());
-
-            /* Execute query. */
-                   int insertedRows = preparedStatement.executeUpdate();
-
-                   if (insertedRows != 1) {
-                       throw new SQLException("Problemas insertando comentario de libros!!!!");
-                   }
-               }  catch (Exception e) {
-                   e.printStackTrace(System.err);
-               }
-
-        }
-
-    }
-
-
-    public static void actualizarLibro(LibroVO libro, Connection connection) {
-        try {
-            /* Create "preparedStatement". */
-            String queryString = "UPDATE LIBRO " +
-                    "SET EDITORIAL=?,  TITULO=?, PAIS_DE_PUBLICACION=?, PRECIO=?, NUMERO_PAGINAS=?, NUMERO_DE_EDICION=?, IDIOMA=?, DESCRICION=?, DESCRICION_CORTA=?, TITULO_ORIGINAL=?, FECHA_DE_PUBLICACION=?" +
-                    "WHERE ISBN = ?";
 
             PreparedStatement preparedStatement =
                     connection.prepareStatement(queryString);
 
-            /* Fill "preparedStatement". */
-            preparedStatement.setString(1, libro.getEditorial());
-            preparedStatement.setString(2, libro.getTitulo());
-            preparedStatement.setString(3, libro.getPaisDePublicacion());
-            preparedStatement.setDouble(4, libro.getPrecio());
-            preparedStatement.setInt(5, libro.getNumeroPaginas());
-            preparedStatement.setInt(6, libro.getNumeroDeEdicion());
-            preparedStatement.setString(7, libro.getIdioma());
-            preparedStatement.setString(8, libro.getDescricion());
-            preparedStatement.setString(9, libro.getDescricionCorta());
-            preparedStatement.setString(10, libro.getTituloOriginal());
-            preparedStatement.setDate(11, new java.sql.Date(libro.getFechaDePublicacion().getTimeInMillis()));
+        /* Execute query. */
+            ResultSet resultSet = preparedStatement.executeQuery();
 
-            preparedStatement.setString(12, libro.getIsbn());
-
+            while (resultSet.next()) {
             /* Execute query. */
-            int insertedRows = preparedStatement.executeUpdate();
+                String isbn = resultSet.getString(1);
+                String editorial = resultSet.getString(2);
+                String titulo = resultSet.getString(3);
+                String pais_de_publicacion = resultSet.getString(4);
+                Double precio = resultSet.getDouble(5);
+                Integer numero_paginas = resultSet.getInt(6);
+                Integer numero_edicion = resultSet.getInt(7);
+                String idioma = resultSet.getString(8);
+                String descripcion = resultSet.getString(9);
+                String descripcion_corta = resultSet.getString(10);
+                String titulo_original = resultSet.getString(11);
 
-            if (insertedRows != 1) {
-                throw new SQLException("Problemas actualizando libro!!!!");
+                Date fecha_de_publicacion_date = resultSet.getDate(12);
+                Calendar fecha_de_publicacion;
+                fecha_de_publicacion = new GregorianCalendar();
+
+                if (fecha_de_publicacion_date != null) {
+                    fecha_de_publicacion.setTime(fecha_de_publicacion_date);
+                }
+
+                String imagen = resultSet.getString(13);
+
+
+                libroVO = new LibroVO(isbn, editorial, titulo, pais_de_publicacion, precio, numero_paginas, numero_edicion, idioma,
+                        descripcion, descripcion_corta, titulo_original, fecha_de_publicacion, imagen);
+
+                resultado.add(libroVO);
             }
         } catch (Exception e) {
             e.printStackTrace(System.err);
-        }
-    }
-
-
-    public static void actualizarComentarioLibro(ComentarioVO comentarioVO, Connection connection) {
-        if (comentarioVO.getLibro() != null && comentarioVO.getUsuario() != null && comentarioVO.getFecha() != null && comentarioVO.getComentario() != null) {
-            try {
-                String queryString = "UPDATE COMENTA " +
-                        "SET COMENTARIO=?" +
-                        "WHERE USUARIO=? AND LIBRO=? AND FECHA=?";
-
-                PreparedStatement preparedStatement =
-                        connection.prepareStatement(queryString);
-
-            /* Fill "preparedStatement". */
-                preparedStatement.setString(1, comentarioVO.getComentario());
-                preparedStatement.setString(2, comentarioVO.getUsuario().getNombreDeUsuario());
-                preparedStatement.setString(3, comentarioVO.getLibro().getIsbn());
-                preparedStatement.setDate(4, new java.sql.Date(comentarioVO.getFecha().getTimeInMillis()));
-
-            /* Execute query. */
-                int insertedRows = preparedStatement.executeUpdate();
-
-                if (insertedRows != 1) {
-                    throw new SQLException("Problemas actualizando comentario de libros!!!!");
-                }
-            }  catch (Exception e) {
-                e.printStackTrace(System.err);
-            }
+            System.out.println("Aquí estoy en el DAO y da Error al listar libros");
 
         }
+        return resultado;
     }
 
-
-
-
-    public static void eliminarLibro(LibroVO libro, Connection connection) {
+    // Correcto
+    public static Integer sizeEncontrarDatosLibros(String pattern, Connection connection) {
+        List<LibroVO> resultado = new ArrayList<>();
+        int cuenta = 0;
         try {
-            /* Create "preparedStatement". */
-            String queryString = "DELETE FROM libro " +
-                    "WHERE isbn = ?";
+            LibroVO libroVO = null;
+        /* Create "preparedStatement". */
+            String queryString = "SELECT count(*) AS CUENTA " +
+                    "FROM sistInfBD.libro " +
+                    "WHERE TITULO LIKE '%" + pattern + "%' OR ISBN LIKE '%" + pattern + "%';";
+
             PreparedStatement preparedStatement =
                     connection.prepareStatement(queryString);
-            /* Fill "preparedStatement". */
-            preparedStatement.setString(1, libro.getIsbn());
 
-            /* Execute query. */
-            int insertedRows = preparedStatement.executeUpdate();
+        /* Execute query. */
+            ResultSet resultSet = preparedStatement.executeQuery();
 
-            if (insertedRows != 1) {
-                throw new SQLException("Problemas eliminando libro!!!!");
+            if (resultSet.next()) {
+                cuenta = resultSet.getInt(1);
             }
         } catch (Exception e) {
             e.printStackTrace(System.err);
+            System.out.println("Aquí estoy en el DAO y da Error al listar libros");
+
         }
+        return cuenta;
+    }
+
+    // Correcto
+    public static List<LibroVO> encontrarDatosLibros(GeneroVO genero, Integer inicio, Integer num_libros, Connection connection) {
+        List<LibroVO> resultado = new ArrayList<>();
+        try {
+            LibroVO libroVO = null;
+        /* Create "preparedStatement". */
+            String queryString = "SELECT ISBN, EDITORIAL, TITULO, PAIS_DE_PUBLICACION, PRECIO, NUMERO_PAGINAS, NUMERO_DE_EDICION, IDIOMA, DESCRICION, DESCRICION_CORTA, TITULO_ORIGINAL, FECHA_DE_PUBLICACION, IMAGEN " +
+                    "FROM sistInfBD.libro a " +
+                    "INNER JOIN sistInfBD.pertenece_al_genero b ON a.isbn = b.libro " +
+                    "WHERE b.genero = ? " +
+                    "LIMIT " + Integer.toString(inicio) + ", " + Integer.toString(num_libros) + "; ";
+
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(queryString);
+
+            preparedStatement.setString(1, genero.getNombre());
+
+        /* Execute query. */
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+            /* Execute query. */
+                String isbn = resultSet.getString(1);
+                String editorial = resultSet.getString(2);
+                String titulo = resultSet.getString(3);
+                String pais_de_publicacion = resultSet.getString(4);
+                Double precio = resultSet.getDouble(5);
+                Integer numero_paginas = resultSet.getInt(6);
+                Integer numero_edicion = resultSet.getInt(7);
+                String idioma = resultSet.getString(8);
+                String descripcion = resultSet.getString(9);
+                String descripcion_corta = resultSet.getString(10);
+                String titulo_original = resultSet.getString(11);
+
+                Date fecha_de_publicacion_date = resultSet.getDate(12);
+                Calendar fecha_de_publicacion;
+                fecha_de_publicacion = new GregorianCalendar();
+
+                if (fecha_de_publicacion_date != null) {
+                    fecha_de_publicacion.setTime(fecha_de_publicacion_date);
+                }
+
+                String imagen = resultSet.getString(13);
+
+                libroVO = new LibroVO(isbn, editorial, titulo, pais_de_publicacion, precio, numero_paginas, numero_edicion, idioma,
+                        descripcion, descripcion_corta, titulo_original, fecha_de_publicacion, imagen);
+
+                resultado.add(libroVO);
+            }
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+            System.out.println("Aquí estoy en el DAO y da Error al listar libros");
+
+        }
+        return resultado;
     }
 
 
+    // Correcto
+    public static Integer sizeEncontrarDatosLibros(GeneroVO genero, Connection connection) {
+        int cuenta = 0;
+        try {
+            String queryString = "SELECT ISBN, EDITORIAL, TITULO, PAIS_DE_PUBLICACION, PRECIO, NUMERO_PAGINAS, NUMERO_DE_EDICION, IDIOMA, DESCRICION, DESCRICION_CORTA, TITULO_ORIGINAL, FECHA_DE_PUBLICACION " +
+                    "FROM sistInfBD.libro a " +
+                    "INNER JOIN sistInfBD.pertenece_al_genero b ON a.isbn = b.libro " +
+                    "WHERE b.genero = ? ;";
+
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(queryString);
+
+            preparedStatement.setString(1, genero.getNombre());
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                cuenta = resultSet.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+            System.out.println("Aquí estoy en el DAO y da Error al listar libros");
+
+        }
+        return cuenta;
+    }
+
+    // Correcto
+    public static List<LibroVO> encontrarDatosLibrosMasVendidos(Date fecha_limite, Integer num_libros, Connection connection) {
+        List<LibroVO> resultado = new ArrayList<>();
+        try {
+            LibroVO libroVO = null;
+        /* Create "preparedStatement". */
+            String queryString = "SELECT b.ISBN, b.EDITORIAL, b.TITULO, b.PAIS_DE_PUBLICACION, b.PRECIO, b.NUMERO_PAGINAS, b.NUMERO_DE_EDICION, b.IDIOMA," +
+                    "  b.DESCRICION, b.DESCRICION_CORTA, b.TITULO_ORIGINAL, b.FECHA_DE_PUBLICACION, b.IMAGEN " +
+                    "FROM (" +
+                    "       SELECT " +
+                    "         libro    AS LIBRO_C, " +
+                    "         count(*) AS NUM_COMPRAS " +
+                    "       FROM sistInfBD.compra " +
+                    "       GROUP BY libro " +
+                    "     ) a " +
+                    "  INNER JOIN sistInfBD.libro b ON a.LIBRO_C = b.isbn ";
+            if (fecha_limite != null) {
+                queryString = queryString + "WHERE b.fecha_de_publicacion >= ? ";
+            }
+            queryString = queryString +
+                    "ORDER BY a.NUM_COMPRAS " +
+                    "LIMIT 0, ?;";
+
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(queryString);
+
+            if (fecha_limite != null) {
+                preparedStatement.setDate(1, fecha_limite);
+                preparedStatement.setInt(2, num_libros);
+            } else {
+
+                preparedStatement.setInt(1, num_libros);
+            }
+
+        /* Execute query. */
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+            /* Execute query. */
+                String isbn = resultSet.getString(1);
+                String editorial = resultSet.getString(2);
+                String titulo = resultSet.getString(3);
+                String pais_de_publicacion = resultSet.getString(4);
+                Double precio = resultSet.getDouble(5);
+                Integer numero_paginas = resultSet.getInt(6);
+                Integer numero_edicion = resultSet.getInt(7);
+                String idioma = resultSet.getString(8);
+                String descripcion = resultSet.getString(9);
+                String descripcion_corta = resultSet.getString(10);
+                String titulo_original = resultSet.getString(11);
+
+                Date fecha_de_publicacion_date = resultSet.getDate(12);
+                Calendar fecha_de_publicacion;
+                fecha_de_publicacion = new GregorianCalendar();
+
+                if (fecha_de_publicacion_date != null) {
+                    fecha_de_publicacion.setTime(fecha_de_publicacion_date);
+                }
+
+                String imagen = resultSet.getString(13);
+
+
+                libroVO = new LibroVO(isbn, editorial, titulo, pais_de_publicacion, precio, numero_paginas, numero_edicion, idioma,
+                        descripcion, descripcion_corta, titulo_original, fecha_de_publicacion, imagen);
+
+                resultado.add(libroVO);
+            }
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+            System.out.println("Aquí estoy en el DAO y da Error al listar libros");
+
+        }
+        return resultado;
+    }
+
+    // Correcto
+    public static List<LibroVO> encontrarDatosLibrosMasVisitados(Date fecha_limite, Integer num_libros, Connection connection) {
+        List<LibroVO> resultado = new ArrayList<>();
+        try {
+            LibroVO libroVO = null;
+        /* Create "preparedStatement". */
+            String queryString = "SELECT b.ISBN, b.EDITORIAL, b.TITULO, b.PAIS_DE_PUBLICACION, b.PRECIO, b.NUMERO_PAGINAS, b.NUMERO_DE_EDICION, b.IDIOMA," +
+                    "  b.DESCRICION, b.DESCRICION_CORTA, b.TITULO_ORIGINAL, b.FECHA_DE_PUBLICACION, b.IMAGEN " +
+                    "FROM (" +
+                    "       SELECT " +
+                    "         libro    AS LIBRO_C, " +
+                    "         count(*) AS NUM_VISITAS " +
+                    "       FROM sistInfBD.visita " +
+                    "       GROUP BY libro " +
+                    "     ) a " +
+                    "  INNER JOIN sistInfBD.libro b ON a.LIBRO_C = b.isbn ";
+            if (fecha_limite != null) {
+                queryString = queryString + "WHERE b.fecha_de_publicacion >= ? ";
+            }
+            queryString = queryString +
+                    "ORDER BY a.NUM_VISITAS " +
+                    "LIMIT 0, ?;";
+
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(queryString);
+
+            if (fecha_limite != null) {
+                preparedStatement.setDate(1, fecha_limite);
+                preparedStatement.setInt(2, num_libros);
+            } else {
+
+                preparedStatement.setInt(1, num_libros);
+            }
+
+        /* Execute query. */
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+            /* Execute query. */
+                String isbn = resultSet.getString(1);
+                String editorial = resultSet.getString(2);
+                String titulo = resultSet.getString(3);
+                String pais_de_publicacion = resultSet.getString(4);
+                Double precio = resultSet.getDouble(5);
+                Integer numero_paginas = resultSet.getInt(6);
+                Integer numero_edicion = resultSet.getInt(7);
+                String idioma = resultSet.getString(8);
+                String descripcion = resultSet.getString(9);
+                String descripcion_corta = resultSet.getString(10);
+                String titulo_original = resultSet.getString(11);
+
+                Date fecha_de_publicacion_date = resultSet.getDate(12);
+                Calendar fecha_de_publicacion;
+                fecha_de_publicacion = new GregorianCalendar();
+
+                if (fecha_de_publicacion_date != null) {
+                    fecha_de_publicacion.setTime(fecha_de_publicacion_date);
+                }
+
+                String imagen = resultSet.getString(13);
+
+
+                libroVO = new LibroVO(isbn, editorial, titulo, pais_de_publicacion, precio, numero_paginas, numero_edicion, idioma,
+                        descripcion, descripcion_corta, titulo_original, fecha_de_publicacion, imagen);
+
+                resultado.add(libroVO);
+            }
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+            System.out.println("Aquí estoy en el DAO y da Error al listar libros");
+
+        }
+        return resultado;
+    }
+
+    // Correcto
+    public static List<LibroVO> encontrarDatosLibrosNuevos(Integer num_libros, Connection connection) {
+        List<LibroVO> resultado = new ArrayList<>();
+        try {
+            LibroVO libroVO = null;
+        /* Create "preparedStatement". */
+            String queryString = "SELECT b.ISBN, b.EDITORIAL, b.TITULO, b.PAIS_DE_PUBLICACION, b.PRECIO, b.NUMERO_PAGINAS, b.NUMERO_DE_EDICION, b.IDIOMA,  b.DESCRICION, b.DESCRICION_CORTA, b.TITULO_ORIGINAL, b.FECHA_DE_PUBLICACION, b.IMAGEN " +
+                    "FROM libro b " +
+                    "ORDER BY b.fecha_de_publicacion DESC " +
+                    "LIMIT 0, ?;";
+
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(queryString);
+
+            preparedStatement.setInt(1, num_libros);
+
+
+        /* Execute query. */
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+
+            while (resultSet.next()) {
+            /* Execute query. */
+                String isbn = resultSet.getString(1);
+                String editorial = resultSet.getString(2);
+                String titulo = resultSet.getString(3);
+                String pais_de_publicacion = resultSet.getString(4);
+                Double precio = resultSet.getDouble(5);
+                Integer numero_paginas = resultSet.getInt(6);
+                Integer numero_edicion = resultSet.getInt(7);
+                String idioma = resultSet.getString(8);
+                String descripcion = resultSet.getString(9);
+                String descripcion_corta = resultSet.getString(10);
+                String titulo_original = resultSet.getString(11);
+
+                Date fecha_de_publicacion_date = resultSet.getDate(12);
+                Calendar fecha_de_publicacion;
+                fecha_de_publicacion = new GregorianCalendar();
+
+                if (fecha_de_publicacion_date != null) {
+                    fecha_de_publicacion.setTime(fecha_de_publicacion_date);
+                }
+
+                String imagen = resultSet.getString(13);
+
+
+                libroVO = new LibroVO(isbn, editorial, titulo, pais_de_publicacion, precio, numero_paginas, numero_edicion, idioma,
+                        descripcion, descripcion_corta, titulo_original, fecha_de_publicacion, imagen);
+
+                resultado.add(libroVO);
+            }
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+            System.out.println("Aquí estoy en el DAO y da Error al listar libros");
+
+        }
+        return resultado;
+    }
 
     public static LibroVO encontrarDatosLibro(String isbn, Connection connection) {
         LibroVO libroVO = null;
         try {
             /* Create "preparedStatement". */
-            String queryString = "SELECT EDITORIAL, TITULO, PAIS_DE_PUBLICACION, PRECIO, NUMERO_PAGINAS, NUMERO_DE_EDICION, IDIOMA, DESCRICION, DESCRICION_CORTA, TITULO_ORIGINAL, FECHA_DE_PUBLICACION " +
+            String queryString = "SELECT EDITORIAL, TITULO, PAIS_DE_PUBLICACION, PRECIO, NUMERO_PAGINAS, NUMERO_DE_EDICION, IDIOMA, DESCRICION, DESCRICION_CORTA, TITULO_ORIGINAL, FECHA_DE_PUBLICACION, IMAGEN " +
                     "FROM LIBRO WHERE  ISBN = ?";
             PreparedStatement preparedStatement =
                     connection.prepareStatement(queryString);
@@ -262,6 +459,7 @@ public class LibroDAO {
             String titulo_original = resultSet.getString(10);
 
             Date fecha_de_publicacion_date = resultSet.getDate(11);
+            String imagen = resultSet.getString(12);
             Calendar fecha_de_publicacion;
             fecha_de_publicacion = new GregorianCalendar();
 
@@ -271,7 +469,7 @@ public class LibroDAO {
 
 
             libroVO = new LibroVO(isbn, editorial, titulo, pais_de_publicacion, precio, numero_paginas, numero_edicion, idioma,
-                    descripcion, descripcion_corta, titulo_original, fecha_de_publicacion);
+                    descripcion, descripcion_corta, titulo_original, fecha_de_publicacion, imagen);
 
         } catch (Exception e) {
             e.printStackTrace(System.err);
@@ -279,21 +477,44 @@ public class LibroDAO {
         return libroVO;
     }
 
-    public static List<LibroVO> encontrarDatosLibro(Connection connection) {
+    public static List<LibroVO> encontrarDatosLibrosRecomendados(String username, Integer num_libros, Connection connection) {
         List<LibroVO> resultado = new ArrayList<>();
         try {
             LibroVO libroVO = null;
-            /* Create "preparedStatement". */
-            String queryString = "SELECT ISBN, EDITORIAL, TITULO, PAIS_DE_PUBLICACION, PRECIO, NUMERO_PAGINAS, NUMERO_DE_EDICION, IDIOMA, DESCRICION, DESCRICION_CORTA, TITULO_ORIGINAL, FECHA_DE_PUBLICACION " +
-                    "FROM sistInfBD.libro ";
+        /* Create "preparedStatement". */
+            String queryString = "SELECT H.ISBN, H.EDITORIAL, H.TITULO, H.PAIS_DE_PUBLICACION, H.PRECIO, H.NUMERO_PAGINAS, H.NUMERO_DE_EDICION, H.IDIOMA, H.DESCRICION, H.DESCRICION_CORTA, H.TITULO_ORIGINAL, H.FECHA_DE_PUBLICACION, H.IMAGEN " +
+                    "FROM libro H " +
+                    "INNER JOIN (SELECT C.libro , SUM(D.VALORACION) " +
+                    "            FROM (SELECT B.usuario AS usuario , COUNT(*) AS VALORACION " +
+                    "                  FROM sistInfBD.compra A " +
+                    "                  INNER JOIN sistInfBD.compra B ON A.libro = B.libro " +
+                    "                  WHERE  A.usuario != B.usuario AND A.usuario = ? " +
+                    "                  GROUP BY B.usuario) D " +
+                    "            INNER JOIN sistInfBD.compra C ON C.usuario = D.usuario " +
+                    "            WHERE NOT EXISTS( " +
+                    "                  SELECT * " +
+                    "                  FROM sistInfBD.compra F " +
+                    "                  WHERE F.usuario = ? AND F.libro = C.libro " +
+                    "                  ) " +
+                    "GROUP BY C.libro " +
+                    "ORDER BY SUM(D.VALORACION) DESC " +
+                    "LIMIT 0,?) G ON G.libro = H.isbn;";
+
+
             PreparedStatement preparedStatement =
                     connection.prepareStatement(queryString);
 
-            /* Execute query. */
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, username);
+            preparedStatement.setInt(3, num_libros);
+
+
+
+        /* Execute query. */
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                /* Execute query. */
+            /* Execute query. */
                 String isbn = resultSet.getString(1);
                 String editorial = resultSet.getString(2);
                 String titulo = resultSet.getString(3);
@@ -314,9 +535,11 @@ public class LibroDAO {
                     fecha_de_publicacion.setTime(fecha_de_publicacion_date);
                 }
 
+                String imagen = resultSet.getString(13);
+
 
                 libroVO = new LibroVO(isbn, editorial, titulo, pais_de_publicacion, precio, numero_paginas, numero_edicion, idioma,
-                        descripcion, descripcion_corta, titulo_original, fecha_de_publicacion);
+                        descripcion, descripcion_corta, titulo_original, fecha_de_publicacion, imagen);
 
                 resultado.add(libroVO);
             }

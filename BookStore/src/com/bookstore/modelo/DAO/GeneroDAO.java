@@ -6,76 +6,29 @@ import com.bookstore.modelo.VO.GeneroVO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GeneroDAO {
-    public static void insertarGenero (GeneroVO genero, Connection connection) {
-        try{
-            /* Create "preparedStatement". */
-            String queryString = "INSERT INTO GENERO " +
-                    "(NOMBRE) " +
-                    "VALUES (?)";
-
-            PreparedStatement preparedStatement =
-                    connection.prepareStatement(queryString);
-
-            /* Fill "preparedStatement". */
-            preparedStatement.setString(1, genero.getNombre() );
-
-
-            /* Execute query. */
-            int insertedRows = preparedStatement.executeUpdate();
-
-            if (insertedRows != 1) {
-                throw new SQLException( "Problemas insertando genero!!!!");
-            }
-        } catch (Exception e) {
-            e.printStackTrace(System.err);
-        }
-    }
-
-    public static void eliminarGenero(GeneroVO genero, Connection connection){
-        try{
-            /* Create "preparedStatement". */
-            String queryString = "DELETE genero " +
-                    "WHERE nombre = ?";
-            PreparedStatement preparedStatement =
-                    connection.prepareStatement(queryString);
-            /* Fill "preparedStatement". */
-            preparedStatement.setString(1, genero.getNombre());
-
-            /* Execute query. */
-            int insertedRows = preparedStatement.executeUpdate();
-
-            if (insertedRows != 1) {
-                throw new SQLException( "Problemas eliminando genero!!!!");
-            }
-        } catch (Exception e) {
-            e.printStackTrace(System.err);
-        }
-    }
-
-    public static List<GeneroVO>  encontrarGeneros (Connection connection){
+    public static List<GeneroVO> encontrarGeneros(Connection connection) {
         List<GeneroVO> resultado = new ArrayList<>();
-        try{
+        try {
             GeneroVO generoVO = null;
-            /* Create "preparedStatement". */
+         /* Create "preparedStatement". */
             String queryString = "SELECT NOMBRE " +
-                    "FROM genero";
+                    "FROM sistInfBD.genero";
             PreparedStatement preparedStatement =
                     connection.prepareStatement(queryString);
 
-            /* Execute query. */
+         /* Execute query. */
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-            	/* Execute query. */
+           /* Execute query. */
                 String nombre = resultSet.getString(1);
 
-                System.out.println("Leyendo genero "+ nombre);
-                generoVO = new GeneroVO (nombre);
+                System.out.println("Leyendo genero " + nombre);
+                generoVO = new GeneroVO(nombre);
                 resultado.add(generoVO);
             }
         } catch (Exception e) {
@@ -84,29 +37,5 @@ public class GeneroDAO {
 
         }
         return resultado;
-    }
-
-    public static boolean existeGenero(String nombre, Connection connection){
-        try{
-            String queryString = "SELECT NOMBRE " +
-                    "FROM GENERO WHERE  NOMBRE = ?";
-            PreparedStatement preparedStatement =
-                    connection.prepareStatement(queryString);
-
-            /* Fill "preparedStatement". */
-            preparedStatement.setString(1, nombre);
-
-            /* Execute query. */
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (!resultSet.first()) {
-                throw new SQLException( "Genero no encontrado!!!!");
-            }
-
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace(System.err);
-            return false;
-        }
     }
 }

@@ -27,38 +27,39 @@ public class LibroVO {
     private List<ValoracionVO> puntuaciones;
     private List<ComentarioVO> comentarios;
 
-    public LibroVO(String isbn, String editorial, String titulo, String pais_de_publicacion, double precio, Integer numero_paginas, Integer numero_de_edicion, String idioma, String descricion, String descricion_corta, String titulo_original, Calendar fecha_de_publicacion) {
-        this.isbn = isbn;
-        this.editorial = editorial;
-        this.titulo = titulo;
-        this.pais_de_publicacion = pais_de_publicacion;
-        this.precio = precio;
-        this.numero_paginas = numero_paginas;
-        this.numero_de_edicion = numero_de_edicion;
-        this.idioma = idioma;
-        this.descricion = descricion;
-        this.descricion_corta = descricion_corta;
-        this.titulo_original = titulo_original;
-        this.fecha_de_publicacion = fecha_de_publicacion;
-        path_imagen="images/img1.jpg";
-    }
+    public LibroVO(String isbn, String editorial, String titulo, String pais_de_publicacion, double precio, Integer numero_paginas, Integer numero_de_edicion, String idioma, String descricion, String descricion_corta, String titulo_original, Calendar fecha_de_publicacion, String path_imagen) {
+          this.isbn = isbn;
+          this.editorial = editorial;
+          this.titulo = titulo;
+          this.pais_de_publicacion = pais_de_publicacion;
+          this.precio = precio;
+          this.numero_paginas = numero_paginas;
+          this.numero_de_edicion = numero_de_edicion;
+          this.idioma = idioma;
+          this.descricion = descricion;
+          this.descricion_corta = descricion_corta;
+          this.titulo_original = titulo_original;
+          this.fecha_de_publicacion = fecha_de_publicacion;
+          this.path_imagen = path_imagen;
+      }
 
-    public LibroVO(String isbn, String editorial, String titulo, String pais_de_publicacion, double precio, Integer numero_paginas, Integer numero_de_edicion, String idioma, String descricion, String descricion_corta, String titulo_original, Calendar fecha_de_publicacion, List<AutorVO> autores, List<GeneroVO> generos) {
-        this.isbn = isbn;
-        this.editorial = editorial;
-        this.titulo = titulo;
-        this.pais_de_publicacion = pais_de_publicacion;
-        this.precio = precio;
-        this.numero_paginas = numero_paginas;
-        this.numero_de_edicion = numero_de_edicion;
-        this.idioma = idioma;
-        this.descricion = descricion;
-        this.descricion_corta = descricion_corta;
-        this.titulo_original = titulo_original;
-        this.fecha_de_publicacion = fecha_de_publicacion;
-        this.autores = autores;
-        this.generos = generos;
-    }
+      public LibroVO(String isbn, String editorial, String titulo, String pais_de_publicacion, double precio, Integer numero_paginas, Integer numero_de_edicion, String idioma, String descricion, String descricion_corta, String titulo_original, Calendar fecha_de_publicacion, String path_imagen, List<AutorVO> autores, List<GeneroVO> generos) {
+          this.isbn = isbn;
+          this.editorial = editorial;
+          this.titulo = titulo;
+          this.pais_de_publicacion = pais_de_publicacion;
+          this.precio = precio;
+          this.numero_paginas = numero_paginas;
+          this.numero_de_edicion = numero_de_edicion;
+          this.idioma = idioma;
+          this.descricion = descricion;
+          this.descricion_corta = descricion_corta;
+          this.titulo_original = titulo_original;
+          this.fecha_de_publicacion = fecha_de_publicacion;
+          this.autores = autores;
+          this.generos = generos;
+          this.path_imagen = path_imagen;
+      }
 
     public String getIsbn() {
         return isbn;
@@ -190,7 +191,7 @@ public class LibroVO {
     }
 
     public String getPathImagen() {
-        return path_imagen;
+        return "/images/" + path_imagen;
     }
 
     public void setPathImagen(String path_imagen) {

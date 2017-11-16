@@ -11,7 +11,8 @@ CREATE TABLE libro(
 	descricion VARCHAR(1000),
 	descricion_corta VARCHAR(1000),
 	titulo_original VARCHAR(50),
-	fecha_de_publicacion DATE
+	fecha_de_publicacion DATE,
+  imagen VARCHAR(50)
 );
 
 CREATE TABLE genero(

@@ -18,6 +18,8 @@
 
     String username = (String) session.getAttribute(CommonConstants.usernameParameterName);
 
+    String pageStatus = (String) request.getAttribute(CommonConstants.pageStatusParameterName);
+
     String href_registrarse = "?";
     
     List<Pair<String, String>> generos = new ArrayList<>();
@@ -138,6 +140,20 @@
     </div><!--/row-->
 
     <hr>
+    <%
+        if(pageStatus!=null) System.out.println(pageStatus);
+
+        if(pageStatus!=null && pageStatus.equals(CommonConstants.loginAuthFailedPageStatus)){
+            System.out.println("Page estatua failed");
+    %>
+
+    <div class="alert alert-danger" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span>
+        Nombre de usuario o contraseña incorrecta
+    </div>
+
+    <%}%>
 
 </div><!--/.container-->
 

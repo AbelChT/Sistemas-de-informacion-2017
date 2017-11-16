@@ -38,13 +38,11 @@
             case CommonConstants.indexNovedadesPageStatus:
                 titulo_pagina = "Novedades";
                 carruseles.add(new Pair<>("Últimas publicaciones", listarLibros(CategoriaLibrosListar.NUEVOS, null , 6)));
-                carruseles.add(new Pair<>("Publicados esta semana", listarLibros(CategoriaLibrosListar.NUEVOS, RangosTiempoLibrosListar.ESTA_SEMANA , 6)));
-                carruseles.add(new Pair<>("Publicados este mes", listarLibros(CategoriaLibrosListar.NUEVOS, RangosTiempoLibrosListar.ESTE_MES , 6)));
                 break;
             default:
                 titulo_pagina = "Inicio";
                 if (username != null)
-                carruseles.add(new Pair<>("Recomendaciones", listarLibros(CategoriaLibrosListar.RECOMENDACIONES, null, new UsuarioVO(username), 6)));
+                carruseles.add(new Pair<>("Recomendaciones", listarLibrosRecomendados(new UsuarioVO(username), 6)));
 
                 carruseles.add(new Pair<>("Más vendidos", listarLibros(CategoriaLibrosListar.MAS_VENDIDOS, null, 6)));
                 carruseles.add(new Pair<>("Populares", listarLibros(CategoriaLibrosListar.MAS_VISITADOS, null, 6)));

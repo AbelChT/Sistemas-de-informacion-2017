@@ -181,6 +181,7 @@ public class AutorDAO {
                 String descripcion = resultSet.getString(9);
                 String descripcion_corta = resultSet.getString(10);
                 String titulo_original = resultSet.getString(11);
+                String imagen = "";
 
                 Date fecha_de_publicacion_date = resultSet.getDate(12);
                 Calendar fecha_de_publicacion;
@@ -191,7 +192,7 @@ public class AutorDAO {
                 }
 
                 LibroVO libroVO = new LibroVO(isbn, editorial, titulo, pais_de_publicacion, precio, numero_paginas, numero_edicion, idioma,
-                        descripcion, descripcion_corta, titulo_original, fecha_de_publicacion);
+                        descripcion, descripcion_corta, titulo_original, fecha_de_publicacion, imagen);
 
                 list.add(libroVO);
             }
