@@ -27,7 +27,7 @@
 
 
     int num_pages = 0;
-    int pagina_actual = 0;
+    int pagina_actual = 1;
 
     if (pag_numb != null) {
         try {
@@ -39,14 +39,15 @@
 
     if (genero_actual != null) {
         titulo_pagina = "Genero " + genero_actual;
-        Pair<List<LibroVO>, Integer> resultado_ = listarLibros(new GeneroVO(genero_actual), (pagina_actual - 1) * 10, 10);
+        Pair<List<LibroVO>, Integer> resultado_ = listarLibros(new GeneroVO(genero_actual), ((pagina_actual - 1) * 10) + 1, 10);
         libros = resultado_.getKey();
         num_pages = resultado_.getValue();
 
     } else if (termino_busqueda != null) {
         titulo_pagina = "Buscando: " + termino_busqueda;
-        Pair<List<LibroVO>, Integer> resultado_ = listarLibros(genero_actual, (pagina_actual - 1) * 10, 10);
+        Pair<List<LibroVO>, Integer> resultado_ = listarLibros(termino_busqueda, ((pagina_actual - 1) * 10) + 1, 10);
         libros = resultado_.getKey();
+        System.out.println("Numlibros = " + Integer.toString(libros.size()));
         num_pages = resultado_.getValue();
 
     } else {
