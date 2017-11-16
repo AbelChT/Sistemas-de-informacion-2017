@@ -4,16 +4,21 @@ import com.bookstore.modelo.DAO.GeneroDAO;
 import com.bookstore.modelo.DAO.LibroDAO;
 import com.bookstore.modelo.DAO.UsuarioDAO;
 import com.bookstore.modelo.GestorDeConexiones.GestorDeConexionesBD;
-import com.bookstore.modelo.VO.GeneroVO;
-import com.bookstore.modelo.VO.LibroVO;
-import com.bookstore.modelo.VO.UsuarioVO;
+import com.bookstore.modelo.VO.*;
 import javafx.util.Pair;
 
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
+
+import static com.bookstore.modelo.DAO.LibroDAO.encontrarDatosLibro;
+import static com.bookstore.modelo.DAO.LibroDAO.insertarLibro;
+import static com.bookstore.modelo.DAO.UsuarioDAO.*;
 
 public class TiendaFacade {
 
@@ -172,4 +177,110 @@ public class TiendaFacade {
         }
         return generos;
     }
+
+
+    public static UsuarioVO leerUsuarioFacade(String nombre) throws SQLException {
+        Connection connection = null;
+        UsuarioVO user = null;
+        try {
+            System.out.println("En la fachada voy a pedir una conexión");
+            connection = GestorDeConexionesBD.getConnection();
+            System.out.println("En la fachada voy a llamar al DAO");
+            user = UsuarioDAO.encontrarDatosUsuario(nombre, connection);
+            System.out.println("En la fachada despues de encontrar en  a llamar al DAO");
+
+        } catch (Exception e) {
+            System.out.println("Excepción en el método de la fachada y no lanza hacia arriba");
+            e.printStackTrace(System.err);
+        } finally {
+            connection.close();
+        }
+        return user;
+    }
+
+
+
+    public static LibroVO listarLibroFacade(LibroVO libro) throws SQLException {
+        Connection connection = GestorDeConexionesBD.getConnection();
+        return encontrarDatosLibro(libro.getIsbn(), connection);
+    }
+
+    public static void main (String[] args) {
+        UsuarioVO usuario = new UsuarioVO("abel1","maria2", "Lopez2", "M", new GregorianCalendar(12,12,12), "dos","fdsfsdfsdf",56433453L,"df");
+        try{
+            Connection connection = GestorDeConexionesBD.getConnection();
+            insertarUsuario(usuario, connection);
+            UsuarioVO user = leerUsuarioFacade("abel1");
+            System.out.println(user.getNombre());
+            Calendar c = Calendar.getInstance();
+            LibroVO libro = new LibroVO("ISBN 2 2", "EDITORial", "titulo1", "pais publ", 99.99, 255, 99, "idioma", "des crip cion", "descrip cion cop", "ti tu lo", c, "images/img1.jpg");
+            AutorVO autor = new AutorVO("Autor", "pais", "descripcion");
+            List<AutorVO> listaAutor = new ArrayList<AutorVO>();
+            listaAutor.add(autor);
+            libro.setAutores(listaAutor);
+            System.out.println(libro.getAutores().size());
+
+                insertarLibro(libro, connection);
+
+            System.out.println( listarLibroFacade(libro).getTitulo() );
+
+            CompraVO compra = new CompraVO(user, libro, c, 99.99);
+            insertarCompraLibroFachada(compra);
+            List<CompraVO> lista = encontrarComprasRealizadasFachada(user.getNombreDeUsuario());
+            for(CompraVO comp : lista){
+                System.out.println("--" + comp.getLibro().getTitulo());
+                //System.out.println("++" + comp.getLibro().getAutores().size());
+            }
+            ComentarioVO coment = new ComentarioVO(user, libro, c, "buen libro");
+            List<ComentarioVO> listaCom = encontrarComentariosRealizadosFacade(user.getNombreDeUsuario());
+            for(ComentarioVO com : listaCom){
+                System.out.println(com.getComentario());
+            }
+        }catch (Exception e){
+            e.printStackTrace(System.err);
+        }
+    }
+
+    public static List<ComentarioVO> encontrarComentariosRealizadosFacade(String nombreDeUsuario) {
+        Connection connection = null;
+        try {
+            connection = GestorDeConexionesBD.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return encontrarComentariosRealizados (nombreDeUsuario, connection);
+
+    }
+
+    public static List<CompraVO> encontrarComprasRealizadasFachada(String nombre) {
+        Connection connection = null;
+        try {
+            connection = GestorDeConexionesBD.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return encontrarComprasRealizadas(nombre, connection);
+    }
+
+    public static void insertarCompraLibroFachada(CompraVO compra) {
+        Connection connection = null;
+        try {
+            connection = GestorDeConexionesBD.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        insertarCompraLibro(compra, connection);
+    }
+
+    public static void actualizarUsuarioFacade(UsuarioVO user) {
+        Connection connection = null;
+        try {
+            connection = GestorDeConexionesBD.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        actualizarUsuario(user, connection);
+    }
+
+
 }
