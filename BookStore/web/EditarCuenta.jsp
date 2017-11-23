@@ -127,7 +127,7 @@
                 <h3>Cuenta</h3>
                 <hr>
 
-                <form action="EditarCuenta" method="post">
+                <form action="/EditarCuenta" method="post">
                 <form class="form-horizontal" role="form" action="Perfil.html">
 
                     <div class="form-group">
@@ -171,8 +171,8 @@
 
         <div class="col-xs-6 col-sm-3 col-sm-pull-9 sidebar-offcanvas" id="sidebar">
             <div class="list-group">
-                <a href="<%=CommonConstants.profilePersonalEdit%>" class="list-group-item">Información personal</a>
-                <a href="<%=CommonConstants.profileAccountEdit%>" class="list-group-item active">Cuenta</a>
+                <a href="<%=CommonConstants.profileAccountEdit %>" class="list-group-item">Información personal</a>
+                <a href="<%=CommonConstants.profilePersonalEdit%>" class="list-group-item active">Cuenta</a>
             </div>
         </div><!--/.sidebar-offcanvas-->
     </div><!--/row-->

@@ -176,7 +176,7 @@ public class UsuarioDAO {
     public static void actualizarUsuario (UsuarioVO usuario, Connection connection) {
         try{
             /* Create "preparedStatement". */
-            String queryString = "UPDATE USUARIO " +
+            String queryString = "UPDATE usuario " +
                     "SET PASSWORD = ?, NOMBRE = ?, APELLIDOS = ?, FECHA_DE_NACIMIENTO = ?, EMAIL = ?, DIRECCION = ?, NUMERO_DE_TELEFONO = ?, NUMERO_DE_CUENTA_BANCARIA = ?" +
                     "WHERE NOMBRE_DE_USUARIO = ?";
             PreparedStatement preparedStatement =

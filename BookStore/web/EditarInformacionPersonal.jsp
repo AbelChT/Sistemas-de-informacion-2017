@@ -124,7 +124,7 @@
                     <hr>
 
 
-                    <form action="EditarInformacionPersonal" method="post">
+                    <form action="/EditarInformacionPersonal" method="post">
                     <form class="form-horizontal" role="form">
                         <div class="form-group">
                             <label class="col-lg-3 control-label">Nombre:</label>
@@ -147,7 +147,7 @@
                         <div class="form-group">
                             <label class="col-lg-3 control-label">Localidad:</label>
                             <div class="col-lg-8">
-                                <input class="form-control" value="<%=user.getDireccionPostal()%>" type="text" name="<%=CommonConstants.surnameProfileParameterName%>">
+                                <input class="form-control" value="<%=user.getDireccionPostal()%>" type="text" name="<%=CommonConstants.dirProfileParameterName%>">
                             </div>
                         </div>
 
@@ -169,8 +169,8 @@
 
             <div class="col-xs-6 col-sm-3 col-sm-pull-9 sidebar-offcanvas" id="sidebar">
                 <div class="list-group">
-                    <a href="<%=CommonConstants.profilePersonalEdit%>" class="list-group-item active">Información personal</a>
-                    <a href="<%=CommonConstants.profileAccountEdit%>" class="list-group-item">Cuenta</a>
+                    <a href="<%=CommonConstants.profileAccountEdit%>" class="list-group-item active">Información personal</a>
+                    <a href="<%=CommonConstants.profilePersonalEdit%>" class="list-group-item">Cuenta</a>
                 </div>
             </div><!--/.sidebar-offcanvas-->
         </div><!--/row-->
