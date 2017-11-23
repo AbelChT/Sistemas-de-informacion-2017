@@ -25,6 +25,7 @@ public class LoginManager extends HttpServlet {
 
             }else{
                 request.setAttribute(CommonConstants.pageStatusParameterName,CommonConstants.loginAuthFailedPageStatus);
+                System.out.println("error login");
                 request.getRequestDispatcher("/login.jsp").forward(request,response);
             }
         }catch (Exception e){

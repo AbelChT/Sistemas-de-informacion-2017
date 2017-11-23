@@ -1,0 +1,16 @@
+INSERT INTO sistInfBD.pertenece_al_genero (libro, genero) VALUES ('1', 'ciencia');
+INSERT INTO sistInfBD.pertenece_al_genero (libro, genero) VALUES ('10', 'idiomas');
+INSERT INTO sistInfBD.pertenece_al_genero (libro, genero) VALUES ('11', 'idiomas');
+INSERT INTO sistInfBD.pertenece_al_genero (libro, genero) VALUES ('12', 'idiomas');
+INSERT INTO sistInfBD.pertenece_al_genero (libro, genero) VALUES ('13', 'idiomas');
+INSERT INTO sistInfBD.pertenece_al_genero (libro, genero) VALUES ('14', 'idiomas');
+INSERT INTO sistInfBD.pertenece_al_genero (libro, genero) VALUES ('15', 'idiomas');
+INSERT INTO sistInfBD.pertenece_al_genero (libro, genero) VALUES ('16', 'idiomas');
+INSERT INTO sistInfBD.pertenece_al_genero (libro, genero) VALUES ('2', 'ciencia');
+INSERT INTO sistInfBD.pertenece_al_genero (libro, genero) VALUES ('3', 'ciencia');
+INSERT INTO sistInfBD.pertenece_al_genero (libro, genero) VALUES ('4', 'ciencia');
+INSERT INTO sistInfBD.pertenece_al_genero (libro, genero) VALUES ('5', 'ciencia');
+INSERT INTO sistInfBD.pertenece_al_genero (libro, genero) VALUES ('6', 'ciencia');
+INSERT INTO sistInfBD.pertenece_al_genero (libro, genero) VALUES ('7', 'ciencia');
+INSERT INTO sistInfBD.pertenece_al_genero (libro, genero) VALUES ('8', 'idiomas');
+INSERT INTO sistInfBD.pertenece_al_genero (libro, genero) VALUES ('9', 'ciencia');

@@ -11,13 +11,8 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 
-import static com.bookstore.modelo.DAO.LibroDAO.encontrarDatosLibro;
-import static com.bookstore.modelo.DAO.LibroDAO.insertarLibro;
 import static com.bookstore.modelo.DAO.UsuarioDAO.*;
 
 public class TiendaFacade {
@@ -178,6 +173,104 @@ public class TiendaFacade {
         return generos;
     }
 
+    //TODO
+    public static LibroVO listarLibro(String ISBN) throws SQLException {
+        Connection connection = null;
+        LibroVO libro = null;
+        try {
+            connection = GestorDeConexionesBD.getConnection();
+
+            libro = LibroDAO.encontrarDatosLibro(ISBN, connection);
+        } catch (Exception e) {
+            System.out.println("Excepción en el método de la fachada y no lanza hacia arriba");
+            e.printStackTrace(System.err);
+        } finally{
+            connection.close();
+        }
+        return libro;
+
+    }
+
+
+    public static List<ComentarioVO> listarComentarios(String ISBN)  throws SQLException {
+        Connection connection = null;
+        List<ComentarioVO> lista = null;
+        try {
+            connection = GestorDeConexionesBD.getConnection();
+
+            lista = LibroDAO.encontrarComentariosLibro(ISBN,connection);
+        } catch (Exception e) {
+            System.out.println("Excepción en el método de la fachada y no lanza hacia arriba");
+            e.printStackTrace(System.err);
+        } finally{
+            connection.close();
+        }
+        return lista;
+
+    }
+
+    public static void addCompra(String usuario, String ISBN) throws SQLException{
+        Connection connection = null;
+        try {
+            connection = GestorDeConexionesBD.getConnection();
+
+            LibroDAO.insertarCompra(usuario ,ISBN,connection);
+        } catch (Exception e) {
+            System.out.println("Excepción en el método de la fachada y no lanza hacia arriba");
+            e.printStackTrace(System.err);
+        } finally{
+            connection.close();
+        }
+
+    }
+
+    public static void addVisita(String usuario, String ISBN) throws SQLException{
+        Connection connection = null;
+        try {
+            connection = GestorDeConexionesBD.getConnection();
+
+            LibroDAO.insertarVisita(usuario ,ISBN,connection);
+        } catch (Exception e) {
+            System.out.println("Excepción en el método de la fachada y no lanza hacia arriba");
+            e.printStackTrace(System.err);
+        } finally{
+            connection.close();
+        }
+
+    }
+
+    public static void addComentario(String usuario, String comentario, String ISBN) throws SQLException{
+
+        Connection connection = null;
+        try {
+            connection = GestorDeConexionesBD.getConnection();
+
+            LibroDAO.insertarComentario(usuario ,ISBN, comentario, connection);
+        } catch (Exception e) {
+            System.out.println("Excepción en el método de la fachada y no lanza hacia arriba");
+            e.printStackTrace(System.err);
+        } finally{
+            connection.close();
+        }
+
+    }
+
+    public static List<AutorVO> listarAutores(String ISBN) throws SQLException {
+        Connection connection = null;
+        List<AutorVO> lista = null;
+        try {
+            connection = GestorDeConexionesBD.getConnection();
+
+            lista = LibroDAO.encontrarAutoresLibro(ISBN,connection);
+        } catch (Exception e) {
+            System.out.println("Excepción en el método de la fachada y no lanza hacia arriba");
+            e.printStackTrace(System.err);
+        } finally{
+            connection.close();
+        }
+        return lista;
+    }
+
 
     public static UsuarioVO leerUsuarioFacade(String nombre) throws SQLException {
         Connection connection = null;
@@ -197,50 +290,6 @@ public class TiendaFacade {
         }
         return user;
     }
-
-
-
-    public static LibroVO listarLibroFacade(LibroVO libro) throws SQLException {
-        Connection connection = GestorDeConexionesBD.getConnection();
-        return encontrarDatosLibro(libro.getIsbn(), connection);
-    }
-
-    public static void main (String[] args) {
-        UsuarioVO usuario = new UsuarioVO("abel1","maria2", "Lopez2", "M", new GregorianCalendar(12,12,12), "dos","fdsfsdfsdf",56433453L,"df");
-        try{
-            Connection connection = GestorDeConexionesBD.getConnection();
-            insertarUsuario(usuario, connection);
-            UsuarioVO user = leerUsuarioFacade("abel1");
-            System.out.println(user.getNombre());
-            Calendar c = Calendar.getInstance();
-            LibroVO libro = new LibroVO("ISBN 2 2", "EDITORial", "titulo1", "pais publ", 99.99, 255, 99, "idioma", "des crip cion", "descrip cion cop", "ti tu lo", c, "images/img1.jpg");
-            AutorVO autor = new AutorVO("Autor", "pais", "descripcion");
-            List<AutorVO> listaAutor = new ArrayList<AutorVO>();
-            listaAutor.add(autor);
-            libro.setAutores(listaAutor);
-            System.out.println(libro.getAutores().size());
-
-                insertarLibro(libro, connection);
-
-            System.out.println( listarLibroFacade(libro).getTitulo() );
-
-            CompraVO compra = new CompraVO(user, libro, c, 99.99);
-            insertarCompraLibroFachada(compra);
-            List<CompraVO> lista = encontrarComprasRealizadasFachada(user.getNombreDeUsuario());
-            for(CompraVO comp : lista){
-                System.out.println("--" + comp.getLibro().getTitulo());
-                //System.out.println("++" + comp.getLibro().getAutores().size());
-            }
-            ComentarioVO coment = new ComentarioVO(user, libro, c, "buen libro");
-            List<ComentarioVO> listaCom = encontrarComentariosRealizadosFacade(user.getNombreDeUsuario());
-            for(ComentarioVO com : listaCom){
-                System.out.println(com.getComentario());
-            }
-        }catch (Exception e){
-            e.printStackTrace(System.err);
-        }
-    }
-
     public static List<ComentarioVO> encontrarComentariosRealizadosFacade(String nombreDeUsuario) {
         Connection connection = null;
         try {
@@ -248,7 +297,7 @@ public class TiendaFacade {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return encontrarComentariosRealizados (nombreDeUsuario, connection);
+        return encontrarComentariosRealizados(nombreDeUsuario, connection);
 
     }
 
@@ -281,6 +330,5 @@ public class TiendaFacade {
         }
         actualizarUsuario(user, connection);
     }
-
 
 }

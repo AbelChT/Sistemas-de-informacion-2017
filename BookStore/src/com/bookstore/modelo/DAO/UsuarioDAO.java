@@ -1,14 +1,13 @@
 package com.bookstore.modelo.DAO;
 
-import java.sql.*;
 import com.bookstore.modelo.VO.*;
 
 import java.sql.*;
 import java.util.ArrayList;
-
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+
 
 public class UsuarioDAO {
     public static boolean comprobarPassUsuario(String username, String pass, Connection connection) {
@@ -37,6 +36,53 @@ public class UsuarioDAO {
         return resultado;
 
     }
+
+    public static UsuarioVO encontrarDatosUsuario (String nombre_user, Connection connection){
+        UsuarioVO usuarioVO = null;
+        try{
+            /* Create "preparedStatement". */
+            String queryString = "SELECT PASSWORD, NOMBRE, APELLIDOS, FECHA_DE_NACIMIENTO, EMAIL, DIRECCION, NUMERO_DE_TELEFONO, NUMERO_DE_CUENTA_BANCARIA " +
+                    "FROM usuario WHERE  NOMBRE_DE_USUARIO = ?";
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(queryString);
+
+            /* Fill "preparedStatement". */
+            preparedStatement.setString(1, nombre_user);
+
+            /* Execute query. */
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (!resultSet.first()) {
+                throw new SQLException( "Usuario no encontrado!!!!");
+            }
+
+            /* Execute query. */
+            String password = resultSet.getString(1);
+            String nombre = resultSet.getString(2);
+            String apellidos = resultSet.getString(3);
+
+            String email = resultSet.getString(5);
+            String direccion = resultSet.getString(6);
+            Long numero_de_telefono = resultSet.getLong(7);
+            String numero_de_cuenta = resultSet.getString(8);
+
+            Date fecha_de_nacimiento_date = resultSet.getDate(4);
+            Calendar fecha_de_nacimiento;
+            fecha_de_nacimiento = new GregorianCalendar();
+
+            if(fecha_de_nacimiento_date!=null){
+                fecha_de_nacimiento.setTime(fecha_de_nacimiento_date);
+            }
+
+            usuarioVO = new UsuarioVO(nombre_user,password,nombre,apellidos,fecha_de_nacimiento,email,direccion,numero_de_telefono,numero_de_cuenta);
+
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+        }
+        return usuarioVO;
+    }
+
+
 
     public static void insertarUsuario (UsuarioVO usuario, Connection connection) {
         try{
@@ -282,52 +328,8 @@ public class UsuarioDAO {
         }
     }
 
-    public static UsuarioVO encontrarDatosUsuario (String nombre_user, Connection connection){
-        UsuarioVO usuarioVO = null;
-        try{
-            /* Create "preparedStatement". */
-            String queryString = "SELECT PASSWORD, NOMBRE, APELLIDOS, FECHA_DE_NACIMIENTO, EMAIL, DIRECCION, NUMERO_DE_TELEFONO, NUMERO_DE_CUENTA_BANCARIA " +
-                    "FROM USUARIO WHERE  NOMBRE_DE_USUARIO = ?";
-            PreparedStatement preparedStatement =
-                    connection.prepareStatement(queryString);
 
-            /* Fill "preparedStatement". */
-            preparedStatement.setString(1, nombre_user);
-
-            /* Execute query. */
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (!resultSet.first()) {
-                throw new SQLException( "Usuario no encontrado!!!!");
-            }
-
-            /* Execute query. */
-            String password = resultSet.getString(1);
-            String nombre = resultSet.getString(2);
-            String apellidos = resultSet.getString(3);
-
-            String email = resultSet.getString(5);
-            String direccion = resultSet.getString(6);
-            Long numero_de_telefono = resultSet.getLong(7);
-            String numero_de_cuenta = resultSet.getString(8);
-
-            Date fecha_de_nacimiento_date = resultSet.getDate(4);
-            Calendar fecha_de_nacimiento;
-            fecha_de_nacimiento = new GregorianCalendar();
-
-            if(fecha_de_nacimiento_date!=null){
-                fecha_de_nacimiento.setTime(fecha_de_nacimiento_date);
-            }
-
-            usuarioVO = new UsuarioVO (nombre_user,password,nombre,apellidos,fecha_de_nacimiento,email,direccion,numero_de_telefono,numero_de_cuenta);
-
-        } catch (Exception e) {
-            e.printStackTrace(System.err);
-        }
-        return usuarioVO;
-    }
-
-    public static List<UsuarioVO>  encontrarDatosUsuario (Connection connection){
+    public static List<UsuarioVO> encontrarDatosUsuario (Connection connection){
         List<UsuarioVO> resultado = new ArrayList<>();
         try{
             UsuarioVO usuarioVO = null;

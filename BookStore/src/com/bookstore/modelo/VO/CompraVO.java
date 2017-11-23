@@ -15,6 +15,12 @@ public class CompraVO {
         this.precio = precio;
     }
 
+    public CompraVO(UsuarioVO usuario, LibroVO libro) {
+        this.usuario = usuario;
+        this.libro = libro;
+    }
+
+
     public UsuarioVO getUsuario() {
         return usuario;
     }

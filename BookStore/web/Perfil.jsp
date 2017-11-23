@@ -5,7 +5,8 @@
 <%@ page import="com.bookstore.modelo.TiendaFacade" %>
 <%@ page import="com.bookstore.modelo.VO.GeneroVO" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="java.util.List" %><%--
+<%@ page import="java.util.List" %>
+<%@ page import="java.text.SimpleDateFormat" %><%--
   Created by IntelliJ IDEA.
   User: alex
   Date: 13/11/17
@@ -19,12 +20,12 @@
     <meta charset="UTF-8">
     <title>Perfil</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
-    <script type="text/javascript" src="js/jquery.min.js"></script>
-    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css"/>
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="css/common.css"/>
-    <link rel="stylesheet" type="text/css" href="css/perfil.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/common.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/perfil.css"/>
 
 </head>
 <body>
@@ -110,10 +111,13 @@
                                 e.printStackTrace(System.err);
                                 response.sendRedirect("errorInterno.html");
                             }
+
+                            SimpleDateFormat formatter1= new SimpleDateFormat("yyyy MM dd");
+                            String fecha = formatter1.format(user.getFechaDeNacimiento().getTime());
                         %>
                         <h5>Nombre: <%=user.getNombre()%></h5>
                         <h5>Localidad: <%=user.getDireccionPostal()%></h5>
-                        <h5>Fecha de nacimiento: <%=user.getFechaDeNacimiento().getTime().getYear()%></h5>
+                        <h5>Fecha de nacimiento: <%=fecha%></h5>
                     </div>
                 </div>
                 <hr>

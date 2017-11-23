@@ -7,20 +7,20 @@ public class CommonConstants {
     public final static String loginLocation = "/login/";
     public final static String indexLocation = "/";
     public final static String errorLocation = "/error/";
-
     public final static String profileLocation = "/profile/";
     public final static String profileCommentLocation = "/comments/";
     public final static String profileLibraryLocation = "/library/";
     public final static String profileAccountEdit = "/EditarInformacionPersonal.jsp";
     public final static String profilePersonalEdit = "/EditarCuenta.jsp";
-
     public final static String logoutLocation = "/logout/";
     public final static String browserLocation = "/browser/";
     public final static String libroInfoLocation = "/libro/";
+    public final static String compraLocation = "/compra/";
 
     public final static String usernameParameterName = "username";
     public final static String passwordParameterName = "password";
     public final static String isbnParameterName = "isbn";
+
 
     // Page comunication constast
 
@@ -44,4 +44,9 @@ public class CommonConstants {
     public final static String surnameProfileParameterName = "apellidos";
     public final static String dirProfileParameterName = "direccion";
     public final static String fullNameProfileParameterName = "nombreCompleto";
+
+    // Book page
+    public final static String commentParameterName = "comentario";
+    public final static String comprarParameterName = "comprar";
+
 }

@@ -12,12 +12,12 @@
     <meta charset="UTF-8">
     <title>Editar Información Personal</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
-    <script type="text/javascript" src="js/jquery.min.js"></script>
-    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css"/>
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="css/common.css"/>
-    <link rel="stylesheet" type="text/css" href="css/perfil.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/common.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/perfil.css"/>
 
 
 </head>
@@ -26,7 +26,7 @@
 <%
     String username = (String) session.getAttribute(CommonConstants.usernameParameterName);
     //UsuarioVO user = leerUsuarioFacade("userprueba");
-    UsuarioVO user = (UsuarioVO) session.getAttribute(CommonConstants.usernameParameterName);
+    UsuarioVO user = leerUsuarioFacade(username);
 
     List<Pair<String, String>> generos = new ArrayList<>();
 
@@ -169,8 +169,8 @@
 
             <div class="col-xs-6 col-sm-3 col-sm-pull-9 sidebar-offcanvas" id="sidebar">
                 <div class="list-group">
-                    <a href="<%=CommonConstants.profilePersonalEdit%>" class="list-group-item">Información personal</a>
-                    <a href="<%=CommonConstants.profileAccountEdit%>" class="list-group-item active">Cuenta</a>
+                    <a href="<%=CommonConstants.profilePersonalEdit%>" class="list-group-item active">Información personal</a>
+                    <a href="<%=CommonConstants.profileAccountEdit%>" class="list-group-item">Cuenta</a>
                 </div>
             </div><!--/.sidebar-offcanvas-->
         </div><!--/row-->
