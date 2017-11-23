@@ -140,8 +140,8 @@
         <div class="col-xs-6 col-sm-3 col-sm-pull-8 sidebar-offcanvas" id="sidebar">
             <div class="list-group">
                 <a href="<%=CommonConstants.profileLocation%>" class="list-group-item">Perfil</a>
-                <a href="<%=CommonConstants.profileLibraryLocation%>" class="list-group-item active">Tu biblioteca</a>
-                <a href="<%=CommonConstants.profileCommentLocation%>" class="list-group-item">Tu críticas</a>
+                <a href="<%=CommonConstants.profileLibraryLocation%>" class="list-group-item">Tu biblioteca</a>
+                <a href="<%=CommonConstants.profileCommentLocation%>" class="list-group-item active">Tu críticas</a>
             </div>
         </div><!--/.sidebar-offcanvas-->
     </div><!--/row-->

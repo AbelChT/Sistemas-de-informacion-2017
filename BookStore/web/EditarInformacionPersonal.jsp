@@ -6,6 +6,7 @@
 <%@ page import="com.bookstore.modelo.TiendaFacade" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -115,6 +116,10 @@
                             <%
                         }
                     }
+
+                                SimpleDateFormat formatter1= new SimpleDateFormat("yyyy MM dd");
+                                String fecha = formatter1.format(user.getFechaDeNacimiento().getTime());
+
                 %>
 
                 <!-- edit form column -->
@@ -141,7 +146,7 @@
                         <div class="form-group">
                             <label class="col-lg-3 control-label">Fecha nacimiento:</label>
                             <div class="col-lg-8">
-                                <input class="form-control" valuue="<%=user.getFechaDeNacimiento().getTime().getYear()%>" type="datetime-local" name="bdaytime">
+                                <input class="form-control" value="<%=fecha%>" type="datetime-local" name="bdaytime">
                             </div>
                         </div>
                         <div class="form-group">

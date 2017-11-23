@@ -331,4 +331,26 @@ public class TiendaFacade {
         actualizarUsuario(user, connection);
     }
 
+    //************************************************************************************
+    public static boolean existeEmailFacade(String email){
+        Connection connection = null;
+        try {
+            connection = GestorDeConexionesBD.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return existeEmail(email, connection);
+    }
+
+    public static void insertarUsuarioFacade(UsuarioVO user){
+        Connection connection = null;
+        try {
+            connection = GestorDeConexionesBD.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        insertarUsuario(user, connection);
+    }
+
+
 }

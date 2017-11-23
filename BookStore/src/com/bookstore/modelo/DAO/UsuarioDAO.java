@@ -87,7 +87,7 @@ public class UsuarioDAO {
     public static void insertarUsuario (UsuarioVO usuario, Connection connection) {
         try{
             /* Create "preparedStatement". */
-            String queryString = "INSERT INTO USUARIO " +
+            String queryString = "INSERT INTO usuario " +
                     "(NOMBRE_DE_USUARIO, PASSWORD, NOMBRE, APELLIDOS, FECHA_DE_NACIMIENTO, EMAIL, DIRECCION, NUMERO_DE_TELEFONO, NUMERO_DE_CUENTA_BANCARIA) " +
                     "VALUES (?,?,?,?,?,?,?,?,?)";
 
@@ -105,6 +105,8 @@ public class UsuarioDAO {
             preparedStatement.setLong(8, usuario.getNumeroDeTelefono());
             preparedStatement.setString(9, usuario.getNumeroDeCuentaBancaria());
 
+            System.out.println(usuario.getNombreDeUsuario() + "---------------------------------->");
+            System.out.println(usuario.getEncryptedPassword() + "--------------------------------->");
 
             /* Execute query. */
             int insertedRows = preparedStatement.executeUpdate();
@@ -384,7 +386,7 @@ public class UsuarioDAO {
             /* Create "preparedStatement". */
             UsuarioVO usuarioVO = encontrarDatosUsuario(nombre_usuario,connection);
             String queryString = "SELECT COMENTARIO,  LIBRO, FECHA " +
-                    "FROM COMENTA WHERE  USUARIO = ?";
+                    "FROM comenta WHERE  USUARIO = ?";
             PreparedStatement preparedStatement =
                     connection.prepareStatement(queryString);
 
@@ -450,7 +452,7 @@ public class UsuarioDAO {
             /* Create "preparedStatement". */
             UsuarioVO usuarioVO = encontrarDatosUsuario(nombre_usuario,connection);
             String queryString = "SELECT PRECIO,  LIBRO, FECHA " +
-                    "FROM COMPRA WHERE  USUARIO = ?";
+                    "FROM compra WHERE  USUARIO = ?";
             PreparedStatement preparedStatement =
                     connection.prepareStatement(queryString);
 
@@ -513,6 +515,42 @@ public class UsuarioDAO {
 
     public static boolean existeUsuario(String nombreusuario, Connection connection){
         return encontrarDatosUsuario(nombreusuario,connection) != null;
+    }
+
+    //***************************************************************************************
+    public static boolean existeEmail(String email, Connection connection){
+        List<UsuarioVO> resultado = new ArrayList<>();
+        try{
+            UsuarioVO usuarioVO = null;
+            /* Create "preparedStatement". */
+            String queryString = "SELECT EMAIL " +
+                    "FROM usuario " +
+                    "WHERE EMAIL = ?";
+
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(queryString);
+
+            /* Fill "preparedStatement". */
+            preparedStatement.setString(1, email);
+
+            /* Execute query. */
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+            	/* Execute query. */
+                String libro = resultSet.getString(1);
+                if(libro == null){
+                    return true;
+                }else{
+                    return  false;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+            System.out.println("Aquí estoy en el DAO y da Error al listar usuariao");
+
+        }
+        return false;
     }
 
 }

@@ -32,6 +32,7 @@
 
 <%
     String username = (String) session.getAttribute(CommonConstants.usernameParameterName);
+    System.out.println(username + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 
     List<Pair<String, String>> generos = new ArrayList<>();
 
@@ -122,7 +123,7 @@
                 </div>
                 <hr>
 
-                <a href="<%=CommonConstants.profilePersonalEdit%>"><input class="btn btn-primary" value="Editar perfil" type="button"></a>
+                <a href="<%=CommonConstants.profileAccountEdit%>"><input class="btn btn-primary" value="Editar perfil" type="button"></a>
             </div>
 
 
@@ -130,8 +131,8 @@
 
         <div class="col-xs-6 col-sm-3 col-sm-pull-8 sidebar-offcanvas" id="sidebar">
             <div class="list-group">
-                <a href="<%=CommonConstants.profileLocation%>" class="list-group-item">Perfil</a>
-                <a href="<%=CommonConstants.profileLibraryLocation%>" class="list-group-item active">Tu biblioteca</a>
+                <a href="<%=CommonConstants.profileLocation%>" class="list-group-item active">Perfil</a>
+                <a href="<%=CommonConstants.profileLibraryLocation%>" class="list-group-item">Tu biblioteca</a>
                 <a href="<%=CommonConstants.profileCommentLocation%>" class="list-group-item">Tu críticas</a>
             </div>
         </div><!--/.sidebar-offcanvas-->

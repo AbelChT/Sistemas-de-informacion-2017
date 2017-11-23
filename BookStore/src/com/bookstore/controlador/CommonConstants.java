@@ -5,6 +5,7 @@ public class CommonConstants {
     // Common
     public final static String pageStatusParameterName = "pagestatus";
     public final static String loginLocation = "/login/";
+    public final static String registerLocation = "/register/";
     public final static String indexLocation = "/";
     public final static String errorLocation = "/error/";
     public final static String profileLocation = "/profile/";
@@ -26,6 +27,11 @@ public class CommonConstants {
 
     // Login Page
     public final static String loginAuthFailedPageStatus = "error";
+
+    // Register Page
+    public final static String dayParameterName = "day";
+    public final static String locationParameterName = "location";
+    public final static String registerFailParameterName = "error";
 
     // Index Page
     public final static String indexMasBuscadosPageStatus = "masBuscados";

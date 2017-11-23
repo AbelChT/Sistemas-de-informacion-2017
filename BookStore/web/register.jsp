@@ -3,7 +3,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.bookstore.controlador.CommonConstants" %>
 <%@ page import="com.bookstore.modelo.TiendaFacade" %>
-<%@ page import="com.bookstore.modelo.VO.GeneroVO" %><%--
+<%@ page import="com.bookstore.modelo.VO.GeneroVO" %>
+<%@ page import="java.util.HashMap" %><%--
   Created by IntelliJ IDEA.
   User: Abel
   Date: 14/11/2017
@@ -104,10 +105,69 @@
 
             <!-- edit form column -->
             <div class="col-md-9 personal-info">
-                <h3>Inicia sesión</h3>
+                <h3>Registrarse</h3>
                 <hr>
 
-                <form class="form-horizontal" role="form" action="<%= CommonConstants.loginLocation %>" method="post">
+                <%
+                    HashMap errores = (HashMap) request.getAttribute(CommonConstants.registerFailParameterName);
+                    if (errores != null){
+                        if (errores.get(CommonConstants.emailProfileParameterName)!= null){
+                            %>
+                            <div class="alert alert-danger">
+                                <strong>Error</strong> <%=(String)errores.get(CommonConstants.emailProfileParameterName)%>
+                            </div>
+                <%
+                    }
+                %>
+                <%   if (errores.get(CommonConstants.usernameParameterName)!=null) {
+                %>
+                            <div class="alert alert-danger">
+                                <strong>Error</strong> <%=(String)errores.get(CommonConstants.usernameParameterName)%>
+                            </div>
+                <%
+                    }%>
+                <%   if (errores.get(CommonConstants.passwordParameterName)!=null) {
+                        %>
+                        <div class="alert alert-danger">
+                                <strong>Error</strong> <%=(String)errores.get(CommonConstants.passwordParameterName)%>
+                        </div>
+                <%
+                    }%>
+                <%
+                    if (errores.get(CommonConstants.fullNameProfileParameterName)!=null) {
+                %>
+                        <div class="alert alert-danger">
+                            <strong>Error</strong> <%=(String)errores.get(CommonConstants.fullNameProfileParameterName)%>
+                        </div>
+                <%
+                        }
+                %>
+                <%
+                    if (errores.get(CommonConstants.surnameProfileParameterName)!=null) {
+                %>
+                        <div class="alert alert-danger">
+                            <strong>Error</strong> <%=(String)errores.get(CommonConstants.surnameProfileParameterName)%>
+                        </div>
+                <%
+                    }
+                %>
+                <%
+                    if (errores.get(CommonConstants.locationParameterName)!=null) {
+                %>
+                <div class="alert alert-danger">
+                    <strong>Error</strong> <%=(String)errores.get(CommonConstants.locationParameterName)%>
+                </div>
+                <%
+                    }
+                %>
+
+                <%
+                    }else{
+                        System.out.println("***************************************************");
+                    }
+                %>
+
+                <form class="form-horizontal" role="form" action="<%= CommonConstants.registerLocation %>" method="post">
 
                     <div class="form-group">
                         <label class="col-md-3 control-label">Nombre de usuario:</label>
@@ -118,16 +178,52 @@
                     <div class="form-group">
                         <label class="col-md-3 control-label">Contraseña:</label>
                         <div class="col-md-8">
-                            <input class="form-control" value="" type="password" name="<%= CommonConstants.passwordParameterName%>">
+                            <input class="form-control" value="" type="password" name="<%= CommonConstants.password1ParameterName%>">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Repetir contraseña:</label>
+                        <div class="col-md-8">
+                            <input class="form-control" value="" type="password" name="<%= CommonConstants.password2ParameterName%>">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Email:</label>
+                        <div class="col-md-8">
+                            <input class="form-control" value="" type="text" name="<%= CommonConstants.emailProfileParameterName%>">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Nombre:</label>
+                        <div class="col-md-8">
+                            <input class="form-control" value="" type="text" name="<%= CommonConstants.fullNameProfileParameterName%>">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Apellidos:</label>
+                        <div class="col-md-8">
+                            <input class="form-control" value="" type="text" name="<%= CommonConstants.surnameProfileParameterName%>">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Fecha de nacimiento:</label>
+                        <div class="col-md-8">
+                            <input class="form-control" value="dd/mm/aaaa" type="text" name="<%= CommonConstants.dayParameterName%>">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Localidad:</label>
+                        <div class="col-md-8">
+                            <input class="form-control" value="" type="text" name="<%= CommonConstants.locationParameterName%>">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="col-md-3 control-label"></label>
                         <div class="col-md-8">
-                            <input class="btn btn-primary" value="Acceder" type="submit">
+                            <input class="btn btn-primary" value="Registrar" type="submit">
                             <span></span>
-                            <a href="<%=CommonConstants.registerLocation%>"><input class="btn btn-default" value="Registrarse"
+                            <a href="<%= href_registrarse%>"><input class="btn btn-default" value="Cancelar"
                                                            type="button"></a>
                         </div>
                     </div>
