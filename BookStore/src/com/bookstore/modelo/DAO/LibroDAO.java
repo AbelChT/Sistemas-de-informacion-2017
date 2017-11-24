@@ -2,6 +2,7 @@ package com.bookstore.modelo.DAO;
 
 
 import com.bookstore.modelo.VO.*;
+import javafx.util.Pair;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -680,11 +681,69 @@ public class LibroDAO {
         }
     }
 
+    public static void insertarValoracion(String usuario, String isbn, Integer valoracion, Connection connection) {
+        try {
+            /* Create "preparedStatement". */
+            String queryString = "INSERT INTO puntua " +
+                    "(USUARIO, LIBRO, PUNTUACION) " +
+                    "VALUES (?,?,?)";
+
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(queryString);
+
+            /* Fill "preparedStatement". */
+            preparedStatement.setString(1, usuario);
+            preparedStatement.setString(2,isbn);
+            preparedStatement.setInt(3, valoracion);
+
+
+            /* Execute query. */
+            int insertedRows = preparedStatement.executeUpdate();
+
+            if (insertedRows != 1) {
+                throw new SQLException("Problemas insertando libro!!!!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+        }
+    }
+
     //*****************  comentarios  ***********************
+
+    public static Integer haValorado (String username, String isbn, Connection connection) {
+
+        System.out.println("Entra funcion ---------------------------");
+        try {
+            /* Create "preparedStatement". */
+            String queryString = "SELECT a.puntuacion " +
+                    "FROM puntua a WHERE a.libro = ? AND a.usuario = ? ";
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(queryString);
+
+            /* Fill "preparedStatement". */
+            preparedStatement.setString(1, isbn);
+            preparedStatement.setString(2, username);
+
+            /* Execute query. */
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if(resultSet.next()){
+                Integer valoracion = resultSet.getInt(1);
+                return valoracion;
+            }else return  -1;
+
+
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+            System.out.println("Aquí estoy en el DAO y da Error al listar comentarios,,,,,,,,,,,,,,,");
+
+        }
+        return -1;
+    }
 
     public static boolean haCompradoLibro (String username, String isbn, Connection connection) {
 
-        System.out.println("Entra funcion ---------------------------");
+        System.out.println("Entra funcion ha comprado libro ---------------------------");
         try {
             /* Create "preparedStatement". */
             String queryString = "SELECT a.usuario " +
@@ -708,6 +767,39 @@ public class LibroDAO {
         return false;
     }
 
+    public static Pair<Integer,Integer> encontrarMediaValoracionesLibro(String isbn, Connection connection) {
+        List<ValoracionVO> resultado = new ArrayList<>();
+        try {
+            ValoracionVO ValoracionVO = null;
+            /* Create "preparedStatement". */
+            String queryString ="SELECT SUM(puntuacion), count(libro) " +
+                    "FROM puntua " +
+                    "WHERE libro = ?" +
+                    "GROUP BY libro;";
 
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(queryString);
+
+            /* Fill "preparedStatement". */
+            preparedStatement.setString(1, isbn);
+
+            /* Execute query. */
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                int puntuacion_total = resultSet.getInt(1);
+                int numero_valoraciones = resultSet.getInt(2);
+                return new Pair<>(puntuacion_total/numero_valoraciones,numero_valoraciones);
+
+            }else{
+                return new Pair<Integer, Integer>(0,0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+            System.out.println("Aquí estoy en el DAO y da Error al listar valoraciones");
+
+        }
+        return new Pair<Integer, Integer>(0,0);
+    }
 
 }

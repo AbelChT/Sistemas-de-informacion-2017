@@ -26,7 +26,7 @@ public class TiendaFacade {
             System.out.println("En la fachada voy a pedir una conexión");
             connection = GestorDeConexionesBD.getConnection();
             System.out.println("En la fachada voy a llamar al DAO");
-            resultado = UsuarioDAO.comprobarPassUsuario(user, pass, connection);
+            resultado = UsuarioDAO.comprobarPassUsuario(user, Integer.toString(pass.hashCode()), connection);
             System.out.println("En la fachada despues de encontrar en a llamar al DAO");
         } catch (Exception e) {
             System.out.println("Excepción en el método de la fachada y no lanza hacia arriba");
@@ -371,4 +371,71 @@ public class TiendaFacade {
         return resultado;
     }
 
+    public static Pair<Integer,Integer> obtenerMediaValoraciones(String ISBN){
+
+        Connection connection = null;
+        Pair<Integer,Integer> media = new Pair<>(0,0);
+        try {
+            connection = GestorDeConexionesBD.getConnection();
+
+            media = LibroDAO.encontrarMediaValoracionesLibro(ISBN,connection);
+            connection.close();
+        } catch (Exception e) {
+            System.out.println("Excepción en el método de la fachada y no lanza hacia arriba");
+            e.printStackTrace(System.err);
+        } finally{
+            //connection.close();
+        }
+        return media;
+    }
+
+    public static void addValoracion(String usuario,String valoracion,String libro){
+        Connection connection = null;
+        try {
+            connection = GestorDeConexionesBD.getConnection();
+
+            LibroDAO.insertarValoracion(usuario ,libro, Integer.parseInt(valoracion), connection);
+            connection.close();
+        } catch (Exception e) {
+            System.out.println("Excepción en el método de la fachada y no lanza hacia arriba");
+            e.printStackTrace(System.err);
+        } finally{
+
+        }
+
+    }
+    public static boolean haValorado(String usuario,String isbn){
+        Connection connection = null;
+        try {
+            connection = GestorDeConexionesBD.getConnection();
+
+           boolean result = (LibroDAO.haValorado(usuario ,isbn, connection) != -1);
+            connection.close();
+
+            return  result;
+        } catch (Exception e) {
+            System.out.println("Excepción en el método de la fachada y no lanza hacia arriba");
+            e.printStackTrace(System.err);
+        } finally{
+
+        }
+        return false;
+    }
+    public static Integer valoracionDada(String usuario,String isbn){
+        Connection connection = null;
+        try {
+            connection = GestorDeConexionesBD.getConnection();
+
+            Integer result =LibroDAO.haValorado(usuario ,isbn, connection);
+            connection.close();
+
+            return  result;
+        } catch (Exception e) {
+            System.out.println("Excepción en el método de la fachada y no lanza hacia arriba");
+            e.printStackTrace(System.err);
+        } finally{
+
+        }
+        return 0;
+    }
 }

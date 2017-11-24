@@ -92,14 +92,7 @@
                 String errorUsername = "";
                 String errorPassword = "";
                 HashMap errores = (HashMap) request.getAttribute("errores");
-                if (errores != null){
-                    if (errores.get("username")!= null){
-                        errorUsername = (String)errores.get(CommonConstants.usernameParameterName); %>
-            <div class="alert alert-danger">
-                <strong>Error</strong> <%=errorUsername%>
-            </div>
-            <%
-                }
+            if (errores != null){
                 if (errores.get(CommonConstants.emailProfileParameterName)!=null) {
                     errorMail = (String) errores.get(CommonConstants.emailProfileParameterName);%>
             <div class="alert alert-danger">
@@ -139,7 +132,7 @@
                     <div class="form-group">
                         <label class="col-md-3 control-label">Nombre de usuario:</label>
                         <div class="col-md-8">
-                            <input class="form-control" value="<%=user.getNombreDeUsuario()%>" type="text" name="<%=CommonConstants.usernameParameterName%>">
+                            <input readonly class="form-control" value="<%=user.getNombreDeUsuario()%>" type="text" name="<%=CommonConstants.usernameParameterName%>">
                         </div>
                     </div>
                     <div class="form-group">
@@ -180,6 +173,15 @@
     <hr>
 
 </div><!--/.container-->
+<div id="search">
+    <button type="button" class="close">×</button>
+    <form  role="form" action="<%= CommonConstants.browserLocation %>" method="get">
+        <input type="search" value="" name="<%= CommonConstants.browserBookNameParameterName %>" placeholder="Introduce el nombre de un libro" />
+        <input class="btn btn-primary" value="Buscar" type="submit">
+    </form>
+</div>
+
+<script type="text/javascript" src="/js/script.js"></script>
 
 </body>
 </html>

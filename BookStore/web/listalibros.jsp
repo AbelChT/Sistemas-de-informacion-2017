@@ -82,7 +82,7 @@
 
     <link rel="stylesheet" type="text/css" href="/js/slick-1.8.0/slick/slick.css"/>
     <link rel="stylesheet" type="text/css" href="/js/slick-1.8.0/slick/slick-theme.css"/>
-    <link rel="stylesheet" type="text/css" href="/css/mainpage.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/libroextendido.css"/>
     <link rel="stylesheet" type="text/css" href="/css/common.css"/>
 </head>
 <body>
@@ -148,7 +148,7 @@
         <% for (LibroVO i : libros) { %>
         <div class="col-sm-6 col-md-4">
             <div class="thumbnail">
-                <img src="<%= i.getPathImagen() %>" style="height: 200px; width: 100%;">
+                <img src="<%= i.getPathImagen() %>" id="imagen_ficha">
                 <div class="caption">
                     <h3><%= i.getTitulo()%>
                     </h3>
@@ -208,6 +208,17 @@
     <%}%>
 
 </div>
+
+<div id="search">
+    <button type="button" class="close">×</button>
+    <form  role="form" action="<%= CommonConstants.browserLocation %>" method="get">
+        <input type="search" value="" name="<%= CommonConstants.browserBookNameParameterName %>" placeholder="Introduce el nombre de un libro" />
+        <input class="btn btn-primary" value="Buscar" type="submit">
+    </form>
+</div>
+
+<script type="text/javascript" src="/js/script.js"></script>
+
 
 </body>
 </html>

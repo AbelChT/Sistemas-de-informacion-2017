@@ -45,7 +45,7 @@ public class EditarCuenta extends HttpServlet {
 		String username = request.getParameter(CommonConstants.usernameParameterName);
 		System.out.println("----------------------------NOMBRE:"+username+":");
 
-		String usernameActual = (String) request.getAttribute(CommonConstants.usernameParameterName);
+		String usernameActual = (String) request.getSession().getAttribute(CommonConstants.usernameParameterName);
 		if(username != null && usernameActual != null) {
 			if (username.trim().equals(new String(""))) {
 				System.out.println("ERROR NOMBRE");

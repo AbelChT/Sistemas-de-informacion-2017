@@ -147,6 +147,15 @@
     </div><!--/row-->
 </div><!--/.container-->
 
+<div id="search">
+    <button type="button" class="close">×</button>
+    <form  role="form" action="<%= CommonConstants.browserLocation %>" method="get">
+        <input type="search" value="" name="<%= CommonConstants.browserBookNameParameterName %>" placeholder="Introduce el nombre de un libro" />
+        <input class="btn btn-primary" value="Buscar" type="submit">
+    </form>
+</div>
+
+<script type="text/javascript" src="/js/script.js"></script>
 
 </body>
 </html>

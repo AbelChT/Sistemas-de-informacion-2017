@@ -40,7 +40,7 @@ public class UsuarioVO {
     }
 
     public String getEncryptedPassword() {
-        return encrypted_password;
+        return Integer.toString(encrypted_password.hashCode());
     }
 
     public void setEncryptedPassword(String encrypted_password) {

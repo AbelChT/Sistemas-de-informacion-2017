@@ -79,7 +79,8 @@ public class EditarInformacionPersonal extends HttpServlet {
 		if (errores==false){
 			try{
 				System.out.println("Voy a llamar a la fachada y métdo Actualziar Usuario de ");
-				UsuarioVO user = leerUsuarioFacade("abel1");
+				String nombreUser = (String) request.getSession().getAttribute(CommonConstants.usernameParameterName);
+				UsuarioVO user = leerUsuarioFacade(nombreUser);
 				user.setNombre(nombre);
 				user.setApellidos(apellidos);
 				user.setDireccionPostal(localidad);

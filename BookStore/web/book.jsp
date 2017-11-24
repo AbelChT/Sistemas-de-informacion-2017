@@ -90,6 +90,9 @@
     if (username != null)
         posee_libro = TiendaFacade.poseeLibro(username, isbn);
 
+    boolean esta_valorado = TiendaFacade.haValorado(username,isbn);
+    int valoracion = TiendaFacade.valoracionDada(username,isbn);
+
 
 %>
 <html>
@@ -186,8 +189,18 @@
                     <b>Fecha de publicación:</b> <%= fecha_pub %><br>
                     <b>Descripcion:</b> <%= DESCRIPCION %><br>
 
-                    <%if (username != null ) {%>
+                    <%
+                        Pair<Integer, Integer> valor = TiendaFacade.obtenerMediaValoraciones(isbn);
+                        if (valor.getValue() != 0){
+                    %>
                     <hr>
+                    <b>Media de valoraciones:</b> <%= Integer.toString(valor.getKey()) %><br>
+                    <b>Numero de valoraciones:</b> <%= Integer.toString(valor.getValue()) %><br>
+                    <%}%>
+
+
+
+                    <%if (username != null ) {%>
 
                     <% if (!posee_libro) {%>
 
@@ -197,6 +210,27 @@
                     </a>
 
                     <%} else {%>
+
+                    <hr>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <% if (esta_valorado){%>
+                            <%= Integer.toString(valoracion)%> estrellas
+                            <%} else{%>
+                            Valora el libro
+                            <%}%>
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="<%= CommonConstants.valoracionManagerLocation +"?" + CommonConstants.estrellasParameterName + "=1"%>">1 estrella</a></li>
+                            <li><a href="<%= CommonConstants.valoracionManagerLocation +"?" + CommonConstants.estrellasParameterName + "=2"%>">2 estrella</a></li>
+                            <li><a href="<%= CommonConstants.valoracionManagerLocation +"?" + CommonConstants.estrellasParameterName + "=3"%>">3 estrella</a></li>
+                            <li><a href="<%= CommonConstants.valoracionManagerLocation +"?" + CommonConstants.estrellasParameterName + "=4"%>">4 estrella</a></li>
+                            <li><a href="<%= CommonConstants.valoracionManagerLocation +"?" + CommonConstants.estrellasParameterName + "=5"%>">5 estrella</a></li>
+                        </ul>
+                    </div>
+                    <hr>
+
                     <div class="alert alert-info">
                         <strong>Libro comprado</strong>
                     </div>

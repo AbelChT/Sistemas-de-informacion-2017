@@ -18,6 +18,7 @@ public class CommonConstants {
     public final static String libroInfoLocation = "/libro/";
     public final static String compraLocation = "/compra/";
     public final static String comentaryManagerLocation = "/commentary/";
+    public final static String valoracionManagerLocation = "/valoracionmanager/";
 
     public final static String usernameParameterName = "username";
     public final static String passwordParameterName = "password";
@@ -58,5 +59,8 @@ public class CommonConstants {
 
     // Comentary manager
     public final static String comentaryIsbmParameterName = "isbnComentary";
+
+    //Valoracion manager
+    public final static String estrellasParameterName = "estrellas";
 
 }
