@@ -559,6 +559,32 @@ public class LibroDAO {
         return resultado;
     }
 
+    public static boolean haCompradoLibro (String username, String isbn, Connection connection) {
+
+        System.out.println("Entra funcion ---------------------------");
+        try {
+            /* Create "preparedStatement". */
+            String queryString = "SELECT a.usuario " +
+                    "FROM compra a WHERE a.libro = ? AND a.usuario = ? ";
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(queryString);
+
+            /* Fill "preparedStatement". */
+            preparedStatement.setString(1, isbn);
+            preparedStatement.setString(2, username);
+
+            /* Execute query. */
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return resultSet.next();
+
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+            System.out.println("Aquí estoy en el DAO y da Error al listar comentarios,,,,,,,,,,,,,,,");
+
+        }
+        return false;
+    }
+
 
 
     public static List<AutorVO> encontrarAutoresLibro(String isbn, Connection connection) {
