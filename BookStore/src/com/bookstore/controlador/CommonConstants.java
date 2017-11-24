@@ -52,6 +52,7 @@ public class CommonConstants {
     public final static String surnameProfileParameterName = "apellidos";
     public final static String dirProfileParameterName = "direccion";
     public final static String fullNameProfileParameterName = "nombreCompleto";
+    public final static String succesParameterName = "exito";
 
     // Book page
     public final static String commentParameterName = "comentario";
@@ -62,5 +63,6 @@ public class CommonConstants {
 
     //Valoracion manager
     public final static String estrellasParameterName = "estrellas";
+
 
 }

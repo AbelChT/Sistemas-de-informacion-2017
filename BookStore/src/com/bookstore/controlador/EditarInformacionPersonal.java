@@ -76,7 +76,7 @@ public class EditarInformacionPersonal extends HttpServlet {
 		}
 		//-----------------------------
 		System.out.println("Despues de leer parametros");
-		if (errores==false){
+		if (!errores){
 			try{
 				System.out.println("Voy a llamar a la fachada y métdo Actualziar Usuario de ");
 				String nombreUser = (String) request.getSession().getAttribute(CommonConstants.usernameParameterName);
@@ -85,6 +85,7 @@ public class EditarInformacionPersonal extends HttpServlet {
 				user.setApellidos(apellidos);
 				user.setDireccionPostal(localidad);
 				actualizarUsuarioFacade (user);
+				request.setAttribute(CommonConstants.succesParameterName, true);
 				RequestDispatcher dispacher = request.getRequestDispatcher("EditarInformacionPersonal.jsp");
 				dispacher.forward(request, response);
 			}catch (Exception e){

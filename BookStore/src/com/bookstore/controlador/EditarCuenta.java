@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 import static com.bookstore.modelo.TiendaFacade.actualizarUsuarioFacade;
+import static com.bookstore.modelo.TiendaFacade.existeEmailFacade;
 import static com.bookstore.modelo.TiendaFacade.leerUsuarioFacade;
 
 /**
@@ -38,48 +39,38 @@ public class EditarCuenta extends HttpServlet {
 		boolean cambioMail = false;
 		boolean cambioPass = false;
 
+		boolean cambiosRealizados = false;
+
 		boolean errores = false;
 		HashMap tablaErrores = new HashMap();
 		System.out.println("He llegado aquí con el usuario logi");
 		String errorNombre = "";
 		String username = request.getParameter(CommonConstants.usernameParameterName);
+		UsuarioVO user = null;
+		try {
+			user = leerUsuarioFacade(username);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		System.out.println("----------------------------NOMBRE:"+username+":");
 
-		String usernameActual = (String) request.getSession().getAttribute(CommonConstants.usernameParameterName);
-		if(username != null && usernameActual != null) {
-			if (username.trim().equals(new String(""))) {
-				System.out.println("ERROR NOMBRE");
-				errorNombre = "El nombre de usuario no puede ser vacio";
-				tablaErrores.put(CommonConstants.usernameParameterName, errorNombre);
-				errores = true;
-			}else{
-				cambioUser = true;
-			}
-			System.out.println("NOMBRE DE USUARIO:" + usernameActual);
-			UsuarioVO nuevo = null;
-			try {
-				nuevo = leerUsuarioFacade(username);
-				if(leerUsuarioFacade(username)!=null && nuevo.getNombreDeUsuario()!=usernameActual){
-					System.out.println("ERROR NOMBRE");
-					errorNombre = "El nombre de usuario ya esta en uso";
-					tablaErrores.put(CommonConstants.usernameParameterName, errorNombre);
-					errores = true;
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
 
-		}
 		//-----------------------------
 		String errorMail = "";
 		String mail = request.getParameter(CommonConstants.emailProfileParameterName);
 		if(mail != null) {
-			if (mail.trim().equals(new String(""))) {
-				errorMail = "El email no puede ser vacio";
-				tablaErrores.put(CommonConstants.emailProfileParameterName, errorMail);
-				errores = true;
-			}else{
-				cambioMail = true;
+			if(!user.getEmail().equals(mail)) {
+				if (mail.trim().equals(new String(""))) {
+					errorMail = "El email no puede ser vacio";
+					tablaErrores.put(CommonConstants.emailProfileParameterName, errorMail);
+					errores = true;
+				} else if (existeEmailFacade(mail)) {
+					errorMail = "El email ya esta en uso";
+					tablaErrores.put(CommonConstants.emailProfileParameterName, errorMail);
+					errores = true;
+				} else {
+					cambioMail = true;
+				}
 			}
 		}
 		//-----------------------------
@@ -109,11 +100,12 @@ public class EditarCuenta extends HttpServlet {
 		if (errores==false){
 			try{
 				System.out.println("Voy a llamar a la fachada y métdo Actualziar Usuario de ");
-				UsuarioVO user = leerUsuarioFacade(usernameActual);
-				if(cambioUser){user.setNombreDeUsuario(username);}
-				if(cambioMail){user.setEmail(mail);}
-				if(cambioPass){user.setEncryptedPassword(password1);}
+				if(cambioUser){user.setNombreDeUsuario(username); cambiosRealizados=true;}
+				if(cambioMail){user.setEmail(mail); cambiosRealizados = true;}
+				if(cambioPass){user.setEncryptedPassword(password1); cambiosRealizados = true;}
 				actualizarUsuarioFacade (user);
+				System.out.println("->error antes " + cambiosRealizados);
+				request.setAttribute(CommonConstants.succesParameterName, cambiosRealizados);
 				RequestDispatcher dispacher = request.getRequestDispatcher("EditarCuenta.jsp");
 				dispacher.forward(request, response);
 			}catch (Exception e){

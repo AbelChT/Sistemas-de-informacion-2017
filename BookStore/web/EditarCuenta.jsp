@@ -110,6 +110,17 @@
                 }
             %>
 
+            <%
+                Boolean exito = (Boolean) request.getAttribute(CommonConstants.succesParameterName);
+                System.out.println("-->exito: " + exito);
+                if(exito != null){
+                    if(exito){ %>
+                        <div class="alert alert-success">
+                            <strong>Exito</strong> Cambios realizados con exito.
+                        </div>
+                    <% }
+                } %>
+
             <!-- edit form column -->
             <div class="col-md-9 personal-info">
                 <!--<div class="alert alert-info alert-dismissable">
