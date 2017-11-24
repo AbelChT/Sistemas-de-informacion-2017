@@ -331,7 +331,7 @@ public class TiendaFacade {
         actualizarUsuario(user, connection);
     }
 
-    //************************************************************************************
+    //****************************************************  registro
     public static boolean existeEmailFacade(String email){
         Connection connection = null;
         try {
@@ -352,5 +352,23 @@ public class TiendaFacade {
         insertarUsuario(user, connection);
     }
 
+    //************************************************** comentario
+    public static boolean poseeLibro(String usuario, String ISBN){
+
+        Connection connection = null;
+        boolean resultado = false;
+        try {
+            connection = GestorDeConexionesBD.getConnection();
+
+            resultado = LibroDAO.haCompradoLibro(usuario,ISBN,connection);
+
+
+            connection.close();
+        } catch (Exception e) {
+            System.out.println("Excepción en el método de la fachada y no lanza hacia arriba");
+            e.printStackTrace(System.err);
+        }
+        return resultado;
+    }
 
 }

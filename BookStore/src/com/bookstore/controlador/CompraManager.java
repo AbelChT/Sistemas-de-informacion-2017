@@ -27,7 +27,7 @@ public class CompraManager extends HttpServlet {
 
         }
 
-        response.sendRedirect(CommonConstants.indexLocation);
+        response.sendRedirect(CommonConstants.libroInfoLocation + "?" + CommonConstants.isbnParameterName + "=" + libro);
 
 
     }

@@ -20,31 +20,31 @@
 
     String username = (String) session.getAttribute(CommonConstants.usernameParameterName);
 
-
-
     List<Pair<String, String>> generos = new ArrayList<>();
 
-    for (GeneroVO i : TiendaFacade.listarGeneros()){
-        generos.add(new Pair<>( i.getNombre(),CommonConstants.browserLocation + "?" +CommonConstants.browserCategoryParameterName + "=" + i.getNombre()));
+    for (GeneroVO i : TiendaFacade.listarGeneros()) {
+        generos.add(new Pair<>(i.getNombre(), CommonConstants.browserLocation + "?" + CommonConstants.browserCategoryParameterName + "=" + i.getNombre()));
     }
 
     String isbn = request.getParameter(CommonConstants.isbnParameterName);
+    session.setAttribute(CommonConstants.comentaryIsbmParameterName, isbn);
 
-    if(username!=null){
-        try{
-            TiendaFacade.addVisita(username,isbn);
-        }catch (Exception e){
+    if (username != null) {
+        try {
+            TiendaFacade.addVisita(username, isbn);
+        } catch (Exception e) {
 
         }
 
     }
 
+
     LibroVO libro = null;
 
     try {
         libro = TiendaFacade.listarLibro(isbn);
-        if(libro==null) System.out.println("es null ----------------------");
-    }catch (Exception e){
+        if (libro == null) System.out.println("es null ----------------------");
+    } catch (Exception e) {
         response.sendRedirect(CommonConstants.errorLocation);
     }
 
@@ -53,38 +53,42 @@
     double PRECIO;
     Calendar FECHA_DE_PUBLICACION;
     Integer NUMERO_PAGINAS, NUMERO_DE_EDICION;
-    EDITORIAL= libro.getEditorial();
-    TITULO= libro.getTitulo();
-    PAIS_DE_PUBLICACION= libro.getPaisDePublicacion();
-    PRECIO= libro.getPrecio();
-    NUMERO_PAGINAS= libro.getNumeroPaginas();
-    NUMERO_DE_EDICION= libro.getNumeroDeEdicion();
-    IDIOMA= libro.getIdioma();
-    DESCRIPCION= libro.getDescricion();
-    DESCRIPCION_CORTA= libro.getDescricionCorta();
-    TITULO_ORIGINAL= libro.getTituloOriginal();
-    FECHA_DE_PUBLICACION= libro.getFechaDePublicacion();
-    IMAGEN= libro.getPathImagen();
-    AUTOR ="";
+    EDITORIAL = libro.getEditorial();
+    TITULO = libro.getTitulo();
+    PAIS_DE_PUBLICACION = libro.getPaisDePublicacion();
+    PRECIO = libro.getPrecio();
+    NUMERO_PAGINAS = libro.getNumeroPaginas();
+    NUMERO_DE_EDICION = libro.getNumeroDeEdicion();
+    IDIOMA = libro.getIdioma();
+    DESCRIPCION = libro.getDescricion();
+    DESCRIPCION_CORTA = libro.getDescricionCorta();
+    TITULO_ORIGINAL = libro.getTituloOriginal();
+    FECHA_DE_PUBLICACION = libro.getFechaDePublicacion();
+    IMAGEN = libro.getPathImagen();
+    AUTOR = "";
 
     List<AutorVO> listaAutores = TiendaFacade.listarAutores(isbn);
 
-    for (AutorVO autor: listaAutores ){
-        AUTOR+= autor.getNombreCompleto();
-        AUTOR+= "\n";
+    for (AutorVO autor : listaAutores) {
+        AUTOR += autor.getNombreCompleto();
+        AUTOR += "\n";
     }
 
 
-   List<ComentarioVO> listaComentarios = TiendaFacade.listarComentarios(isbn);
+    List<ComentarioVO> listaComentarios = TiendaFacade.listarComentarios(isbn);
 
     System.out.println("Coentarios ----------------------------------------");
     System.out.println(listaComentarios.size());
 
-    SimpleDateFormat formatter= new SimpleDateFormat("yyyy MM dd");
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy MM dd");
     String fecha_pub = formatter.format(FECHA_DE_PUBLICACION.getTime());
 
-    session.setAttribute(CommonConstants.isbnParameterName,isbn);
+    session.setAttribute(CommonConstants.isbnParameterName, isbn);
 
+    boolean posee_libro = false;
+
+    if (username != null)
+        posee_libro = TiendaFacade.poseeLibro(username, isbn);
 
 
 %>
@@ -125,8 +129,12 @@
             </li>
 
             <li class="nav-item"><a href="<%= CommonConstants.indexLocation %>">Inicio </a></li>
-            <li class="nav-item"><a href="<%= CommonConstants.indexLocation + "?" + CommonConstants.pageStatusParameterName + "=" + CommonConstants.indexMasBuscadosPageStatus %>">Más populares </a></li>
-            <li class="nav-item"><a href="<%=  CommonConstants.indexLocation + "?" + CommonConstants.pageStatusParameterName + "=" + CommonConstants.indexNovedadesPageStatus %>">Novedades </a></li>
+            <li class="nav-item"><a
+                    href="<%= CommonConstants.indexLocation + "?" + CommonConstants.pageStatusParameterName + "=" + CommonConstants.indexMasBuscadosPageStatus %>">Más
+                populares </a></li>
+            <li class="nav-item"><a
+                    href="<%=  CommonConstants.indexLocation + "?" + CommonConstants.pageStatusParameterName + "=" + CommonConstants.indexNovedadesPageStatus %>">Novedades </a>
+            </li>
 
             <li class="nav-item"><a href="#search">Buscar</a></li>
         </ul>
@@ -154,77 +162,105 @@
 </nav>
 
 <div class="container-fluid">
-    <div class="book">
-        <h2> <%= TITULO %> </h2>
-        <a href="<%= IMAGEN %>"><img src="<%= IMAGEN %>" ></a>
-        <div class="ficha">
-            <p>
-                <b>Autor:</b>  <%= AUTOR %> <br>
-                <b>Título original:</b> <%= TITULO_ORIGINAL%><br>
-                <b>Editorial:</b> <%= EDITORIAL %><br>
-                <b>País:</b>	<%= PAIS_DE_PUBLICACION %><br>
-                <b>Fecha de publicación:</b> <%= fecha_pub %><br>
-                <b>Descripcion:</b> <%= DESCRIPCION %><br>
-            </p>
-        </div>
-        <%if(username != null){%>
-        <a href="<%= CommonConstants.compraLocation+ "?" + CommonConstants.isbnParameterName + "=" + isbn + "&" + CommonConstants.usernameParameterName + "=" + username %>" ><button class="btn" type="button">Comprar</button></a>
-        <%}%>
-        <div class="hr"><hr /></div>    <!--linea divisoria-->
 
+    <div class="col-md-7">
+        <div class="panel panel-default">
 
-    </div>
+            <div class="row">
+                <div class="col-xs-8 col-sm-6 col-sm-offset-1">
 
-    <div class="comments">
-        <div id="comment_form">
-
-            <% for (ComentarioVO i: listaComentarios) {
-                String user, comentario;
-                UsuarioVO usuario = i.getUsuario();
-                user = usuario.getNombreDeUsuario();
-                Calendar date = i.getFecha();
-                comentario=i.getComentario();
-
-               SimpleDateFormat formatter1= new SimpleDateFormat("yyyy MM dd");
-               String fecha = formatter1.format(date.getTime());
-            %>
-            <div>
-                <h4><%=user%></h4>
-                <h4><%=fecha%></h4>
-                <p><%=comentario%></p>
+                    <h1><%= TITULO %>
+                    </h1>
+                </div>
             </div>
 
-            <% } %>
-
-            <%if(username != null){%>
-            <form class="form-horizontal" role="form" action="" method="get">
-
-                <div class="form-group">
-                    <label class="col-md-3 control-label">Comentario:</label>
-                    <div class="col-md-8">
-                        <input class="form-control" value="" type="text" name="<%= CommonConstants.commentParameterName%>" >
-                    </div>
+            <div class="row">
+                <div class="col-xs-8 col-sm-3 col-sm-offset-1">
+                    <img id="imagen_ficha" src="<%= IMAGEN %>">
                 </div>
+                <div class="col-xs-4 col-sm-6">
+                    <b>Autor:</b> <%= AUTOR %> <br>
+                    <b>Título original:</b> <%= TITULO_ORIGINAL%><br>
+                    <b>Editorial:</b> <%= EDITORIAL %><br>
+                    <b>País:</b> <%= PAIS_DE_PUBLICACION %><br>
+                    <b>Fecha de publicación:</b> <%= fecha_pub %><br>
+                    <b>Descripcion:</b> <%= DESCRIPCION %><br>
 
-                <div class="form-group">
-                    <label class="col-md-3 control-label"></label>
-                    <div class="col-md-8">
-                        <input class="btn btn-primary" value="Comentar" type="submit">
+                    <%if (username != null ) {%>
+                    <hr>
+
+                    <% if (!posee_libro) {%>
+
+                    <a href="<%= CommonConstants.compraLocation+ "?" + CommonConstants.isbnParameterName + "=" + isbn + "&" + CommonConstants.usernameParameterName + "=" + username %>">
+                        <button type="button" class="btn btn-primary" href="<%= CommonConstants.indexLocation%>">Comprar
+                        </button>
+                    </a>
+
+                    <%} else {%>
+                    <div class="alert alert-info">
+                        <strong>Libro comprado</strong>
                     </div>
+                    <%}%>
+                    <%}%>
                 </div>
-            </form>
-            <%}%>
-
+            </div>
 
         </div>
     </div>
+
+    <% for (ComentarioVO i : listaComentarios) {
+        String user, comentario;
+        UsuarioVO usuario = i.getUsuario();
+        user = usuario.getNombreDeUsuario();
+        Calendar date = i.getFecha();
+        comentario = i.getComentario();
+
+        SimpleDateFormat formatter1 = new SimpleDateFormat("yyyy MM dd");
+        String fecha = formatter1.format(date.getTime());
+    %>
+
+    <div class="col-sm-7">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <strong><%=user%>
+                </strong> <span class="text-muted"><%=fecha%></span>
+                <div class="panel-body">
+                    <%=comentario%>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% } %>
+
+    <%if (username != null) {%>
+    <div class="col-sm-7">
+        <form role="form" action="<%= CommonConstants.comentaryManagerLocation %>"
+              method="post">
+
+            <div class="form-group">
+
+                <input class="form-control" value="" type="text"
+                       name="<%= CommonConstants.commentParameterName%>">
+            </div>
+
+
+            <div class="form-group">
+
+                <input class="btn btn-primary" value="Comentar" type="submit">
+            </div>
+        </form>
+    </div>
+
+    <%}%>
+
 
 </div><!--/.container-->
 
 <div id="search">
     <button type="button" class="close">×</button>
-    <form  role="form" action="<%= CommonConstants.browserLocation %>" method="get">
-        <input type="search" value="" name="<%= CommonConstants.browserBookNameParameterName %>" placeholder="Introduce el nombre de un libro" />
+    <form role="form" action="<%= CommonConstants.browserLocation %>" method="get">
+        <input type="search" value="" name="<%= CommonConstants.browserBookNameParameterName %>"
+               placeholder="Introduce el nombre de un libro"/>
         <input class="btn btn-primary" value="Buscar" type="submit">
     </form>
 </div>
