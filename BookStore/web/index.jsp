@@ -8,6 +8,7 @@
 <%@ page import="com.bookstore.modelo.VO.GeneroVO" %>
 <%@ page import="com.bookstore.modelo.TiendaFacade" %>
 <%@ page import="com.bookstore.modelo.VO.UsuarioVO" %>
+<%@ page import="java.util.Collection" %>
 <%--
   Created by Abel
   Date: 13/11/2017
@@ -57,6 +58,9 @@
     for (GeneroVO i : TiendaFacade.listarGeneros()){
         generos.add(new Pair<>( i.getNombre(),CommonConstants.browserLocation + "?" +CommonConstants.browserCategoryParameterName + "=" + i.getNombre()));
     }
+
+    //      lucene test
+    indexar_libros();
 
 %>
 <html>

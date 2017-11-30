@@ -45,11 +45,13 @@
 
     } else if (termino_busqueda != null) {
         titulo_pagina = "Buscando: " + termino_busqueda;
-        Pair<List<LibroVO>, Integer> resultado_ = listarLibros(termino_busqueda, ((pagina_actual - 1) * 10) + 1, 10);
+        /*Pair<List<LibroVO>, Integer> resultado_ = listarLibros(termino_busqueda, ((pagina_actual - 1) * 10) + 1, 10);
         libros = resultado_.getKey();
         System.out.println("Numlibros = " + Integer.toString(libros.size()));
         num_pages = resultado_.getValue();
-
+        */
+        libros = buscarLibrosLucene(termino_busqueda);
+        num_pages = 1;
     } else {
         response.sendRedirect("/error/");
     }

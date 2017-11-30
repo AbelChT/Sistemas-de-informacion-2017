@@ -6,16 +6,34 @@ import com.bookstore.modelo.DAO.UsuarioDAO;
 import com.bookstore.modelo.GestorDeConexiones.GestorDeConexionesBD;
 import com.bookstore.modelo.VO.*;
 import javafx.util.Pair;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.store.FSDirectory;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.SQLException;
+import java.io.IOException;
+import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import static com.bookstore.modelo.DAO.UsuarioDAO.*;
+import static org.apache.lucene.util.Version.LUCENE_40;
+
 
 public class TiendaFacade {
+
+    public static String INDEX_DIR = "../indices/";
 
     // Correcto
     public static boolean authenticate(String user, String pass) throws SQLException {
@@ -438,4 +456,157 @@ public class TiendaFacade {
         }
         return 0;
     }
+
+    /////////////////////////////    lucene     ///////////////////////////////////
+
+    public static void indexar_libros(){
+        Connection connection = null;
+        try {
+            connection = GestorDeConexionesBD.getConnection();
+            String queryString = "SELECT ISBN ,EDITORIAL, TITULO, PAIS_DE_PUBLICACION, PRECIO, NUMERO_PAGINAS, NUMERO_DE_EDICION, IDIOMA, DESCRICION, DESCRICION_CORTA, TITULO_ORIGINAL, FECHA_DE_PUBLICACION " +
+                    "FROM libro ";
+
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(queryString);
+
+            /* Fill "preparedStatement". */
+            //preparedStatement.setString(1, nombre_completo_autor);
+
+            /* Execute query. */
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            StandardAnalyzer analyzer = new StandardAnalyzer(LUCENE_40);
+            IndexWriterConfig config = new IndexWriterConfig(LUCENE_40, analyzer);
+            IndexWriter writer = new IndexWriter(FSDirectory.open(new java.io.File(INDEX_DIR)), config);
+            writer.deleteAll();
+            writer.close();
+            while (resultSet.next()) {
+                String isbn  = resultSet.getString(1);
+
+                String editorial = resultSet.getString(2);
+                String titulo = resultSet.getString(3);
+                String pais_de_publicacion = resultSet.getString(4);
+                Double precio = resultSet.getDouble(5);
+                Integer numero_paginas = resultSet.getInt(6);
+                Integer numero_edicion = resultSet.getInt(7);
+                String idioma = resultSet.getString(8);
+                String descripcion = resultSet.getString(9);
+                String descripcion_corta = resultSet.getString(10);
+                String titulo_original = resultSet.getString(11);
+                Date fecha_de_publicacion_date = resultSet.getDate(12);
+
+                Document document = new Document();
+                document.add(new Field("isbn", isbn, Field.Store.YES, Field.Index.NOT_ANALYZED));
+                document.add(new Field("precio", String.valueOf(precio.intValue()), Field.Store.YES, Field.Index.NOT_ANALYZED));
+                document.add(new Field("titulo", titulo, Field.Store.YES, Field.Index.ANALYZED));
+                document.add(new Field("pais", pais_de_publicacion, Field.Store.YES, Field.Index.ANALYZED));
+                document.add(new Field("idioma", idioma, Field.Store.YES, Field.Index.ANALYZED));
+                document.add(new Field("descripcion", descripcion, Field.Store.YES, Field.Index.ANALYZED));
+
+                writer = new IndexWriter(FSDirectory.open(new java.io.File(INDEX_DIR)), config);
+                writer.addDocument(document);
+                System.out.println("--------------------- indexado libro");
+                writer.close();
+            }
+
+
+            connection.close();
+        } catch (Exception e) {
+            System.out.println("Excepción en el método de la fachada y no lanza hacia arriba");
+            e.printStackTrace(System.err);
+        }
+    }
+
+    private static ArrayList<String> buscarQueryEnIndice(int paginas, int hitsPorPagina, String queryAsString) {
+
+        DirectoryReader directoryReader = null;
+        try {
+            directoryReader = DirectoryReader.open(FSDirectory.open(new java.io.File(INDEX_DIR)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        IndexSearcher buscador = new IndexSearcher(directoryReader);
+
+        StandardAnalyzer analyzer = new StandardAnalyzer(LUCENE_40);
+        QueryParser queryParser = new QueryParser(LUCENE_40, "contenido", analyzer);
+        Query query =null;
+
+        try {
+            query = queryParser.parse(queryAsString);
+        } catch (org.apache.lucene.queryparser.classic.ParseException e) {
+            e.printStackTrace();
+        }
+        TopDocs resultado = null;
+        try {
+            resultado = buscador.search(query, paginas * hitsPorPagina);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        ScoreDoc[] hits = resultado.scoreDocs;
+        ArrayList<String> isbnResultado = new ArrayList<>();
+
+            System.out.println("Found " + hits.length + " hits.");
+            for(int i=0;i<hits.length;++i) {
+                int docId = hits[i].doc;
+                Document doc = null;
+                try {
+                    doc = buscador.doc(docId);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                System.out.println((i + 1) + ". " + doc.get("path") + "\t" + hits[i].score + "\t" + doc.get("isbn"));
+                isbnResultado.add(doc.get("isbn"));
+            }
+        return isbnResultado;
+    }
+
+    private static ArrayList<String> buscarQueries(int paginas, int hitsPorPagina, Collection queries) throws IOException {
+        Iterator<String> iterador = queries.iterator();
+        while (iterador.hasNext()){
+            String queryAsString = (String) iterador.next();
+            return buscarQueryEnIndice( paginas, hitsPorPagina, queryAsString);
+        }
+        return new ArrayList<String>();
+    }
+
+    public static List<LibroVO> buscarLibrosLucene(String busqueda) {
+        Collection<String> queries = new ArrayList<String>();
+        ArrayList<String> isbnResultado = new ArrayList<>();
+        if (busqueda.contains("isbn")) {
+            busqueda = busqueda.replace("isbn", "");
+            queries.add("isbn:" + busqueda);
+        } else if (busqueda.contains("titulo")) {
+            busqueda = busqueda.replace("titulo", "");
+            queries.add("titulo:" + busqueda);
+        } else if (busqueda.contains("precio")) {
+            busqueda = busqueda.replace("precio", "");
+            queries.add("precio:" + busqueda);
+        } else if (busqueda.contains("descripcion")) {
+            busqueda = busqueda.replace("descripcion", "");
+            queries.add("descripcion:" + busqueda);
+        } else if (busqueda.contains("titulo")) {
+            busqueda = busqueda.replace("titulo", "");
+            queries.add("titulo:" + busqueda);
+        } else if (busqueda.contains("idioma")) {
+            busqueda = busqueda.replace("idioma", "");
+            queries.add("idioma:" + busqueda);
+        } else if (busqueda.contains("pais")) {
+            busqueda = busqueda.replace("pais", "");
+            queries.add("pais:" + busqueda);
+        } else {
+            // por defecto busca titulo
+            queries.add("titulo:" + busqueda);
+        }
+        List<LibroVO> libros = new ArrayList<>();
+        try {
+            isbnResultado = buscarQueries(1, 6, queries);
+            for(String isbn : isbnResultado){
+                    libros.add(listarLibro(isbn));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return libros;
+    }
+
 }
