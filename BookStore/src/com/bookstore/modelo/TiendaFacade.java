@@ -6,6 +6,7 @@ import com.bookstore.modelo.DAO.UsuarioDAO;
 import com.bookstore.modelo.GestorDeConexiones.GestorDeConexionesBD;
 import com.bookstore.modelo.VO.*;
 import javafx.util.Pair;
+import org.apache.lucene.analysis.es.SpanishAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -475,7 +476,7 @@ public class TiendaFacade {
             /* Execute query. */
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            StandardAnalyzer analyzer = new StandardAnalyzer(LUCENE_40);
+            SpanishAnalyzer analyzer = new SpanishAnalyzer(LUCENE_40);
             IndexWriterConfig config = new IndexWriterConfig(LUCENE_40, analyzer);
             IndexWriter writer = new IndexWriter(FSDirectory.open(new java.io.File(INDEX_DIR)), config);
             writer.deleteAll();
@@ -527,7 +528,7 @@ public class TiendaFacade {
         }
         IndexSearcher buscador = new IndexSearcher(directoryReader);
 
-        StandardAnalyzer analyzer = new StandardAnalyzer(LUCENE_40);
+        SpanishAnalyzer analyzer = new SpanishAnalyzer(LUCENE_40);
         QueryParser queryParser = new QueryParser(LUCENE_40, "contenido", analyzer);
         Query query =null;
 
