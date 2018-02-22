@@ -1,0 +1,3 @@
+javac -cp ../lib/lucene-core-4.0.0.jar:../lib/lucene-analyzers-common-4.0.0.jar:../lib/lucene-queryparser-4.0.0.jar:../bin/ ../src/sistemasinformacion/practica3/IndexadorYBuscador.java ../src/sistemasinformacion/practica3/Apartado21.java -d ../bin/
+javac -cp ../lib/lucene-core-4.0.0.jar:../lib/lucene-analyzers-common-4.0.0.jar:../lib/lucene-queryparser-4.0.0.jar:../bin/ ../src/sistemasinformacion/practica3/Buscador.java ../src/sistemasinformacion/practica3/Apartado22_Buscador.java -d ../bin/
+javac -cp ../lib/lucene-core-4.0.0.jar:../lib/lucene-analyzers-common-4.0.0.jar:../lib/lucene-queryparser-4.0.0.jar:../bin/ ../src/sistemasinformacion/practica3/Indexador.java ../src/sistemasinformacion/practica3/Apartado22_CreadorIndice.java -d ../bin/

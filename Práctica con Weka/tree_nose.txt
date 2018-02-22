@@ -1,0 +1,61 @@
+Texto resultado:
+=== Run information ===
+
+Scheme:       weka.classifiers.trees.J48 -C 0.25 -M 2
+Relation:     weather.symbolic
+Instances:    14
+Attributes:   5
+              outlook
+              temperature
+              humidity
+              windy
+              play
+Test mode:    evaluate on training data
+
+=== Classifier model (full training set) ===
+
+J48 pruned tree
+------------------
+
+outlook = sunny
+|   humidity = high: no (3.0)
+|   humidity = normal: yes (2.0)
+outlook = overcast: yes (4.0)
+outlook = rainy
+|   windy = TRUE: no (2.0)
+|   windy = FALSE: yes (3.0)
+
+Number of Leaves  : 	5
+
+Size of the tree : 	8
+
+
+Time taken to build model: 0 seconds
+
+=== Evaluation on training set ===
+
+Time taken to test model on training data: 0 seconds
+
+=== Summary ===
+
+Correctly Classified Instances          14              100      %
+Incorrectly Classified Instances         0                0      %
+Kappa statistic                          1     
+Mean absolute error                      0     
+Root mean squared error                  0     
+Relative absolute error                  0      %
+Root relative squared error              0      %
+Total Number of Instances               14     
+
+=== Detailed Accuracy By Class ===
+
+                 TP Rate  FP Rate  Precision  Recall   F-Measure  MCC      ROC Area  PRC Area  Class
+                 1,000    0,000    1,000      1,000    1,000      1,000    1,000     1,000     yes
+                 1,000    0,000    1,000      1,000    1,000      1,000    1,000     1,000     no
+Weighted Avg.    1,000    0,000    1,000      1,000    1,000      1,000    1,000     1,000     
+
+=== Confusion Matrix ===
+
+ a b   <-- classified as
+ 9 0 | a = yes
+ 0 5 | b = no

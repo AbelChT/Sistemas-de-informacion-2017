@@ -1,1 +1,0 @@
-INSERT INTO sistInfBD.comenta (usuario, libro, fecha, comentario) VALUES ('abel1', '1', '2017-11-17', 'buen libro');

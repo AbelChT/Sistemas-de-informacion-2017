@@ -1,0 +1,93 @@
+#####################################################################
+
+Resultados obtenidos utilizando el analizador de tipo StandardAnalyzer
+
+#####################################################################
+ Termino a buscar: tomcat
+Found 1 hits.
+1. ./ficheros/dos.txt	0.54986566
+
+ Termino a buscar: tomcat OR lucene
+Found 3 hits.
+1. ./ficheros/dos.txt	0.21883568
+2. ./ficheros/uno.txt	0.12118581
+3. ./ficheros/tres.txt	0.05404176
+
+ Termino a buscar: "Lucene"
+Found 2 hits.
+1. ./ficheros/uno.txt	0.4003836
+2. ./ficheros/tres.txt	0.17854758
+
+ Termino a buscar: of
+Found 0 hits.
+
+ Termino a buscar: tomcat*
+Found 1 hits.
+1. ./ficheros/dos.txt	1.0
+
+ Termino a buscar: jakarta
+Found 0 hits.
+
+ Termino a buscar: Lucene ‐apache
+Found 3 hits.
+1. ./ficheros/uno.txt	0.37372783
+2. ./ficheros/tres.txt	0.21289572
+3. ./ficheros/dos.txt	0.10757655
+
+
+#####################################################################
+
+Resultados obtenidos utilizando el analizador de tipo SimpleAnalyzer
+
+#####################################################################
+
+ Termino a buscar: tomcat
+Found 1 hits.
+1. ./ficheros/dos.txt	0.4582214
+
+ Termino a buscar: tomcat OR lucene
+Found 3 hits.
+1. ./ficheros/dos.txt	0.18236308
+2. ./ficheros/uno.txt	0.10098818
+3. ./ficheros/tres.txt	0.05049409
+
+ Termino a buscar: "Lucene"
+Found 2 hits.
+1. ./ficheros/uno.txt	0.33365297
+2. ./ficheros/tres.txt	0.16682649
+
+ Termino a buscar: of
+Found 4 hits.
+1. ./ficheros/dos.txt	0.16057569
+2. ./ficheros/cuatro.txt	0.102997586
+3. ./ficheros/tres.txt	0.09353251
+4. ./ficheros/uno.txt	0.08583132
+
+ Termino a buscar: tomcat*
+Found 1 hits.
+1. ./ficheros/dos.txt	1.0
+
+ Termino a buscar: jakarta
+Found 0 hits.
+
+ Termino a buscar: Lucene ‐apache
+Found 3 hits.
+1. ./ficheros/uno.txt	0.31143984
+2. ./ficheros/tres.txt	0.20161319
+3. ./ficheros/dos.txt	0.08964713
+
+
+#####################################################################
+
+Conclusiones
+
+#####################################################################
+
+Se puede comprobar como mediante un analizador de tipo StandardAnalyzer todas las consultas excepto
+“of” reciben puntuaciones superiores o iguales respecto a las mismas consultas ejecutadas mediante
+un analizador de tipo SimpleAnalyzer. Esto es debido a que el analizador de tipo StandardAnalyzer
+elimina las stopwords (palabras sin significado como artículos, determinantes ...) del inglés.
+Como para obtener la puntuación se tiene en cuenta el número de términos totales, y en el caso
+del StandardAnalyzer se reduce, la puntuación es mayor. Por otro lado,“of” al ser una stopword,
+no cuenta sus coincidencias, por ello obtiene una puntuación de 0 hits.
+
